@@ -1,7 +1,7 @@
-#While-Loop and Boolean Expressions
+# While-Loop and Boolean Expressions
 
-##What to learn here
+## What to learn here
 * ...    
 
-##Extra Credit
+## Extra Credit
 * indexing

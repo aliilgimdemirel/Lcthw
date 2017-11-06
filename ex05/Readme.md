@@ -1,4 +1,4 @@
-#Memorizing C Operators
+# Memorizing C Operators
 
-##What to learn here
+## What to learn here
 * Nothing. 

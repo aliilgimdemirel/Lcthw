@@ -1,6 +1,6 @@
-#Formatted Printing
+# Formatted Printing
 
-##What you learn here
+## What you learn here
 Very similar to ex1.
 * Escape sequences
 ```

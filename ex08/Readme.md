@@ -1,7 +1,7 @@
-#If, Else-IF, Else
+# If, Else-IF, Else
 
-##What to learn here
+## What to learn here
 * if / else if / else
 * && , ||
-##Extra Credit
+## Extra Credit
 * Go search online the different Boolean operators. (!=, ! , (ternary) COND ? TRUE : FALSE )

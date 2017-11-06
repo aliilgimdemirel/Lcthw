@@ -1,6 +1,6 @@
-#Using a Debugger
+# Using a Debugger
 
-##What to learn here
+## What to learn here
 * GDB Quick ref.
   * backtrace
   * next
