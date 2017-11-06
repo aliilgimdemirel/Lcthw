@@ -12,12 +12,14 @@
 struct Address {
 	int id;
 	int set;
-	char name[MAX_DATA];
-	char email[MAX_DATA];
+	char *name;
+	char *email;
 };
 
 struct Database {
-	struct Address rows[MAX_ROWS];
+	int MAX_DATA;
+	int MAX_ROWS;
+	struct Address **rows;
 };
 
 struct Connection {
@@ -61,7 +63,7 @@ void Database_load(struct Connection *conn)
 		die("Failed to load database.\n", conn);
 }
 
-struct Connection *Database_open(const char *filename, char mode)
+struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, int MAX_DATA)
 {
 	struct Connection *conn = malloc(sizeof(struct Connection));
 	if (!conn)
@@ -101,11 +103,13 @@ void Database_write(struct Connection *conn)
 		die("Connot flush database", conn);
 }
 
-void Database_create(struct Connection *conn, int MAX_DATA, int MAX_ROWS)
+void Database_create(struct Connection *conn)
 {
 	int i = 0;
+	conn->db->MAX_ROWS = MAX_ROWS;
+	conn->db->MAX_DATA = MAX_DATA;
 
-	for (i = 0; i < MAX_ROWS; i++) {
+	for (i = 0; i < conn->db->MAX_ROWS; i++) {
 		// make a prototype to initialize it
 		struct Address addr = {.id = i, .set = 0};
 		// then just assign it
@@ -154,7 +158,7 @@ void Database_list(struct Connection *conn)
 	int i = 0;
 	struct Database *db = conn->db;
 	
-	for(i = 0; i < MAX_ROWS; i++) {
+	for(i = 0; i < conn->db->MAX_ROWS; i++) {
 		struct Address *cur = &db->rows[i];
 
 		if (cur->set) {
@@ -166,53 +170,55 @@ void Database_list(struct Connection *conn)
 int main(int argc, char *argv[])
 {
 	if(argc<3)
-		die("USAGE: ex17 <dbfile> <action> [action params] <MAX_DATA> <MAX_ROWS>", NULL);
+		die("USAGE: ex17 <dbfile> <MAX_DATA> <MAX_ROWS> <action> [action params] ", NULL);
 
 	char *filename = argv[1];
-	char action = argv[2][0];
-	struct Connection *conn = Database_open(filename, action);
+	char action = argv[4][0];
+	int MAX_ROWS = atoi( argv[3] );
+	int MAX_DATA = atoi( argv[2] );
+	struct Connection *conn = Database_open(filename, action, MAX_ROWS, MAX_DATA); // TODO cursor
 	int id = 0;
 
-	if (argc > 3) id= atoi(argv[3]);
+	if (argc > 5) id= atoi(argv[5]);
 	if (id >= MAX_ROWS) die("There's not that many records.", conn);
 	
 	switch (action) {
 		case 'c':
-			Database_create(conn);
-			Database_write(conn);
+			Database_create(conn); // TODO
+			Database_write(conn); // TODO
 			break;
 
 		case 'g':
 			if (argc != 4)
 				die("Need an id to get", conn);
 
-			Database_get(conn, id);
+			Database_get(conn, id); // TODO
 			break;
 	
 		case 's':
 			if (argc != 6)
 				die("Need id, name, email to set", conn);
 		
-			Database_set(conn, id, argv[4], argv[5]);
-			Database_write(conn);
+			Database_set(conn, id, argv[4], argv[5]); // TODO
+			Database_write(conn); // TODO
 			break;
 
 		case 'd':
 			if (argc != 4)
 				die("Need id to delete", conn);
 		
-			Database_delete(conn, id);
-			Database_write(conn);
+			Database_delete(conn, id); // TODO
+			Database_write(conn); // TODO
 			break;
 			
 		case 'l':
-			Database_list(conn);
+			Database_list(conn); // TODO
 			break;
 		default:
-			die("Invalid saction: c=create, g=get, s=set, d=del, l=list", conn);
+			die("Invalid action: c=create, g=get, s=set, d=del, l=list", conn);
 	}
 
-	Database_close(conn);
+	Database_close(conn); // TODO
 
 	return 0;
 }
