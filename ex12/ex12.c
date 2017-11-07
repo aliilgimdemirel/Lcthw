@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 	  'S', 'h', 'a', 'w', '\0'
 	  };
  
-  //Warning: On some systems you may habe to change the
+  //Warning: On some systems you may have to change the
   //%ld in this code to a %u since it will use unsigned ints
   printf("The size of an int : %ld\n", sizeof(int));
   printf("The size of areas (int[]): %ld\n", sizeof(areas));
@@ -30,7 +30,64 @@ int main(int argc, char* argv[])
 
   printf("name=\"%s\" and full_name=\"%s\"\n", name, full_name);
 
+  /*
+   * Extra Credit -1- BEGIN
+   * Try assigning to elements in the areas array with areas[0] = 100; and similar
+   */
+  	printf("=Extra Creadit -1-=\n");
 
-  return 0;
+	areas[3] = 100;
+	areas[6] = 100;
+
+	int i = 0;
+	for ( i = 0; i < (sizeof(areas)/sizeof(int)) ; i++) {
+		if ( areas[i] == 0) {
+		} else {
+			printf("Stored value in position %d is %d\n", i, areas[i]);
+		}
+	}
+
+  /*
+   * Extra Credit -1- END 
+   */
+
+  /*
+   * Extra Credit -2- BEGIN
+   * Try assigning to elements of name and full_name
+   */
+  	printf("==Extra Creadit -2-==\n");
+
+	name[2] = 'G';
+	name[6] = 100;
+
+	i = 0;
+	for ( i = 0; i < (sizeof(name)/sizeof(char)) ; i++) {
+			printf("name contains at position %d is %c\n", i, name[i]);
+	}
+
+  /*
+   * Extra Credit -2- END 
+   */
+
+  /*
+   * Extra Credit -3- BEGIN
+   * Try setting one element of areas to a character from name.
+   */
+  	printf("===Extra Creadit -3-===\n");
+
+	areas[2] = name[2] ;
+//	name[6] = 100;
+
+	i = 0;
+	for ( i = 0; i < (sizeof(areas)/sizeof(int)) ; i++) {
+			printf("name contains at position %d is %d\n", i, areas[i]);
+	}
+
+  /*
+   * Extra Credit -3- END 
+   */
+
+
+	return 0;
 
 }

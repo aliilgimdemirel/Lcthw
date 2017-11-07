@@ -149,6 +149,16 @@ int main(int argc, char* argv[])
 
 	//char name5[4] = {"873"};
 
+	int hasan = ((2^24) * 12) +( (2^16) * 0) +( (2^8) *0) +( (2^0) * 0);
+	printf("The value of hasan is: %#x\n" , hasan);
+	printf("The adres of hasan is: %#x\n" , &hasan);
+	int *mahmut = &hasan;
+	char *byte = &hasan;
+
+	printf("Where are we pointing at?\nmahmut:\t%p\nbyte:\t%p\n", mahmut, byte);
+	printf("What is the value where they point at?\nmahmut:\t%#x\nbyte:\t%#x\n", *mahmut, *byte);
+
+
 /*
  * Extra Credit -4- END
  */

@@ -19,10 +19,27 @@ int main(int argc, char *argv[])
 	// let's make our own array of strings
 	char *states[] = {
 		"California", "Oregon",
-		NULL ,"Texas"
+		"Washington" ,"Texas"
 	};
 
 	int num_states = 4;
+	
+	for (i = 0; i < num_states; i++){
+		printf("state %d: %s\n", i, states[i]);
+	}
+
+
+
+	/*
+	 * Extra Credit -1- BEGIN
+	 * Try assigning to elements of name and full_name
+	 */
+	  printf("=Extra Creadit -1-=\n");
+	
+	
+	/*
+	 * Extra Credit -1- END 
+	 */
 	
 	states[2] = argv[1];	
 	
