@@ -37,22 +37,19 @@ int main(int argc, char *argv[])
 
 	printf("---\n");
 
+	/*	
+	//=========================================================================
 	int *ages_ptr = ages;
 	char *byte_ptr = ages;
 	char **names_ptr = names;
 
 	// Following function call is one with a lot of text.
-	printPtr(names_ptr, ages_ptr, count);
+	//	printPtr(names_ptr, ages_ptr, count);
 
 	// Comparing memory interpretation differences  
 	printf("Size of ages via pointer: %lu\nSize of ages via array: %lu\n", sizeof(*ages_ptr), sizeof(ages));
+	printf("---\n");
 
-
-
-
-
-
-	/*	
 	// This part was used for representing different uses of pointers.
 	// 1- How to reach in a integer byte by byte ?
 
@@ -65,12 +62,59 @@ int main(int argc, char *argv[])
 		printf("%d'th pass ended\n\n", i);
 	}
 	*/
+	//=========================================================================
 
-	
-	/*
+// TODO	
+// 1- ptr address value, '&' '*' stress more.
+// 2- check sizeof(), and try to find why 5 VS 12
+	  /*
+	  clash of name1-name2 W ptr= -5
+	  clash of name1-name2 W/o ptr= -12
+	  name1:	
+	  name2:	
+	  
+	  @
+	  Adress of name1:	0x400b05 with Size:	 8
+	  Adress of name2:	0x400b0a with Size:	 8
+	  address of name1 using &: 0xf95abc00 using p: 0x7ffdf95abc00, using *: AHAN
+	  address of name2 using &: 0xf95abc60 using p: 0x7ffdf95abc60, using *: AHK
+	  clash of name3-name4 W ptr= -5
+	  clash of name3-name4 W/o ptr= -6
+	  Adress of name3:	0x400c30 with Size:	 8
+	  Adress of name4:	0x400c35 with Size:	 8
+	  address of name3 using &: 0xf95abc90 using p: 0x7ffdf95abc90, using *: BABA
+	  address of name4 using &: 0xf95abcc0 using p: 0x7ffdf95abcc0, using *: ANA
+	  */
+
+// TODO
+
+	//=========================================================================
+	char name0[] = {"AHAN"};
 	char *name1[] = {"AHAN"};
-	char *name2[5] = {"AHK"};
+	char **pName1 = name1;
+	//char *name2[5] = {"AHK"};
 
+	printf("Adress of name0: %p\nand the value in there as a char is:%c\nand as a string it is: %s\n",
+			&name0, name0[0], name0);
+	printf("The sizeof the address of name0 is:%lu\t and the size of its value is:%lu\n",
+			sizeof(&name0), sizeof(name0));
+
+	printf("---\n");
+	
+	printf("Adress of name1: %p\nand the value in there as a char is:%c\nand as a string it is: %s\n",
+			name1, **name1, *name1);
+	printf("The sizeof the address of name 1 is:%lu\t and the size of its value is:%lu\n",
+			sizeof(name1), sizeof(*name1));
+	
+	printf("---\n");
+	
+	printf("Adress of pName1: %p\nand the value in there as a char is:%c\nand as a string it is: %s\n",
+			pName1, *pName1, *pName1);
+	printf("The sizeof the address of name 1 is:%lu\t and the size of its value is:%lu\n",
+			sizeof(pName1), sizeof(*pName1));
+
+
+	/*
     printf("clash of name1-name2 W ptr= %li\n", *name1-*name2);
     printf("clash of name1-name2 W/o ptr= %li\n", name1-name2);
 	printf("name1:\t%c\nname2:\t%s\n", name1, name2);
@@ -91,7 +135,9 @@ int main(int argc, char *argv[])
 	printf("address of name4 using &: %#x using p: %p, using *: %s\n", &name4, name4, *name4);	
 
 	*/
-
+	//=========================================================================
+	
+	//=========================================================================
 	// Original ex15.c remainings can be found below.
 	/*
 	//set up the pointers to the start of the arrays
@@ -120,6 +166,7 @@ int main(int argc, char *argv[])
 
 	}
 	*/
+	//=========================================================================
 
 	return 0;
 }
