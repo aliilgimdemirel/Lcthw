@@ -19,4 +19,7 @@ Important thing about this is that when using a pointer the pointed object's are
 ## other findings;
 * passing an array to a function e.g.(char \*name[]) you must also provide the size of the array otherwise it is lost. [More into this in stackoverflow](https://stackoverflow.com/questions/1975128/why-isnt-the-size-of-an-array-parameter-the-same-as-within-main).
 * An array's name is its address also. And as a result when you want to create a pointer to that array you do not need to put the & sign because the name is already its address.
-
+* side affects and passing by reference.[Another good resource](https://www.youtube.com/watch?v=Rxvv9krECNw)
+* be careful with your ptr arithmetic: \*ptr+1 is not the same thing with \*(ptr+1) or 
+* \*ptr++ increases the value stored in Adress ptr.
+* \*(ptr + 1)++ increases the value stored in Adress ptr+1
