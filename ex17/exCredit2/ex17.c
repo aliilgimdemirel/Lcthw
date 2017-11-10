@@ -239,7 +239,7 @@ void Database_set(struct Connection *conn, int id, const char *name,
 // TODO
 void Database_get(struct Connection *conn, int id)
 {
-	struct Address *addr = &conn->db->rows[id];
+	struct Address *addr = conn->db->rows[id];
 	
 	if (addr->set) {
 		Address_print(addr);
@@ -254,10 +254,10 @@ void Database_delete(struct Connection *conn, int id)
 	if (conn->db->rows[id]->set == 0) {//cond for already unset
 		;
 	} else { // cond for set
-		conn->db->rows[id]->id == id;
-		conn->db->rows[id]->set == 0;
-		conn->db->rows[id]->email == NULL;
-		conn->db->rows[id]->name == NULL;
+		conn->db->rows[id]->id = id;
+		conn->db->rows[id]->set = 0;
+		conn->db->rows[id]->email = NULL;
+		conn->db->rows[id]->name = NULL;
 	}
 
 	//struct Address addr = {.id = id, .set = 0};
