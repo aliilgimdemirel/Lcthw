@@ -6,12 +6,8 @@
 #include <errno.h>
 #include <string.h>
 
-//kellMah
-//kellMah//
-
-
-#define MAX_DATA 512
-#define MAX_ROWS 100
+//#define MAX_DATA 512
+//#define MAX_ROWS 100
 
 struct Address {
 	int id;
@@ -32,10 +28,11 @@ struct Connection {
 void Database_close(struct Connection *conn)
 {
 	if (conn) {
-		fclose(conn->file);
-	if (conn->db)
-		free(conn->db);
-	free(conn);
+		if (conn->file)
+			fclose(conn->file);
+		if (conn->db)
+			free(conn->db);
+		free(conn);
 	}
 }
 
@@ -104,7 +101,7 @@ void Database_write(struct Connection *conn)
 		die("Connot flush database", conn);
 }
 
-void Database_create(struct Connection *conn)
+void Database_create(struct Connection *conn, int MAX_DATA, int MAX_ROWS)
 {
 	int i = 0;
 
@@ -169,7 +166,7 @@ void Database_list(struct Connection *conn)
 int main(int argc, char *argv[])
 {
 	if(argc<3)
-		die("USAGE: ex17 <dbfile> <action> [action params]", NULL);
+		die("USAGE: ex17 <dbfile> <action> [action params] <MAX_DATA> <MAX_ROWS>", NULL);
 
 	char *filename = argv[1];
 	char action = argv[2][0];

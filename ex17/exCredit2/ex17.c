@@ -34,17 +34,19 @@ struct Connection {
 // TODO
 void Database_close(struct Connection *conn)
 {
-	if (conn) {
-		if (conn->file)
-			fclose(conn->file);
-		if (conn->db)
-			free(conn->db);
-		free(conn);
-	}
+	printf("Entering CLOSE\n");
+	//if (conn) {
+	//	if (conn->file)
+	//		fclose(conn->file);
+	//	if (conn->db)
+	//		free(conn->db);
+	//	free(conn);
+	//}
 }
 
 void die(const char *message, struct Connection *conn)
 {
+	printf("Entering DIE\n");
 	if (errno) {
 		perror(message);
 	} else {
@@ -56,23 +58,70 @@ void die(const char *message, struct Connection *conn)
 	exit(1);
 }
 
+// NOTODO
 void Address_print(struct Address *addr)
 {
-	printf("%d %s %s\n", addr->id, addr->name, addr->email);
+	printf("Entering ADD_PRINT\n");	
+	printf("%d\n", addr->id);
+	printf("%d\n", addr->set);
+	//printf("AAA\n");	
+	printf("%s\n", addr->name);
+	printf("%s\n", addr->email);
+	
+	//char *byte1 = addr->name;
+	//char *byte2 = addr->name;
+
+	//printf("BBB\n");	
+	//for(int i = 0; i < 40 ; i++){
+	//	printf("%c", (byte1[i]));
+	//}
+	//printf("\n");
+	//for(int i = 0; i < 40 ; i++){
+
+	//	printf("%c", (byte2[i]));
+	//}
+	//printf("\n");
+	printf("Exiting ADD_PRINT\n");	
+
 }
 
 // TODO
+// can make the load search for db's and matching MAX_DATA&MAX_ROWS?
+// But that logic is inside Database_open
 void Database_load(struct Connection *conn)
 {
-	int rc = fread(conn->db, sizeof(struct Database), 1, conn->file);
-	if (rc != 1)
-		die("Failed to load database.\n", conn);
+	printf("Entering LOAD\n");	
+	rewind(conn->file);
+
+	int rc = 0;
+	int i = 0;
+	for ( i = 0; i < conn->db->MAX_ROWS; i++)	
+	{
+		rc = fread(&conn->db->rows[i]->id, sizeof(int), 1, conn->file);
+		//rc = fread(&set, sizeof(int), 1, conn->file);
+		//rc = fread(name, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
+		//rc = fread(email, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
+		//printf("What is ID: %d\n", id);
+		//printf("What is SET: %d\n", set);
+		//printf("What is NAME: %s\n", name);
+		//printf("What is EMAIL: %s\n", email);
+		//conn->db->rows[i]->id = id;
+		rc = fread(&conn->db->rows[i]->set, sizeof(int), 1, conn->file);
+		rc = fread(conn->db->rows[i]->name, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
+		rc = fread(conn->db->rows[i]->email, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
+		if (rc != 1)
+			die("Failed to load database.\n", conn);
+	}
+
+	//Address_print(conn->db->rows[0]);
+	printf("Exiting LOAD\n");	
 }
 
 // TODO
 // 1- MAX_DATA & MAX_ROWS should be put inside DB here. [DONE]
 struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, int MAX_DATA)
 {
+	printf("Entering OPEN\n");	
     struct Connection *conn = malloc(sizeof(struct Connection));
     if (!conn)
         die("Memory error", conn);
@@ -82,17 +131,37 @@ struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, 
     if (!conn->db)
         die("Memory error", conn);
 
+    conn->db->MAX_ROWS = MAX_ROWS;
+	conn->db->MAX_DATA = MAX_DATA;
+	
+    for (int i = 0; i < conn->db->MAX_ROWS; i++) {
+        // make a prototype to initialize it
+
+        struct Address *addr = malloc(sizeof(struct Address));
+        conn->db->rows[i] = addr;
+        addr->id = i;
+        addr->set = 0;
+        addr->name = malloc(sizeof(char ) * conn->db->MAX_DATA );
+        addr->email = malloc(sizeof(char ) * conn->db->MAX_DATA );
+
+        // then just assign it
+	}
+
     if (mode == 'c') {
         conn->file = fopen(filename, "w");
-        conn->db->MAX_ROWS = MAX_ROWS;
-        conn->db->MAX_DATA = MAX_DATA;
     } else {
         conn->file = fopen(filename, "r+");
+		if (conn->file) {
+			Database_load(conn);
+			Address_print(conn->db->rows[0]);
+		}
     }
 
     if (!conn->file)
         die("Failed to open the file.\n", conn);
+
 	
+	printf("Exiting OPEN\n");	
     return conn;
 
 /*
@@ -131,114 +200,104 @@ struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, 
 // TODO
 void Database_write(struct Connection *conn)
 {
+	printf("Entering WRITE\n");	
 	rewind(conn->file);
 
-	int rc = fwrite(conn->db, sizeof(struct Database), 1, conn->file);
-	if (rc != 1)
-		die("Cannot flush database", conn);
+	int i = 0;
 
-	rc = fflush(conn->file);
-	if (rc == -1)
-		die("Connot flush database", conn);
+	for(i = 0; i < conn->db->MAX_ROWS; i++)
+	{	
+		int rc = fwrite(&conn->db->rows[i]->id, sizeof(int ), 1, conn->file);
+		if (rc != 1)
+			die("Cannot flush database", conn);
+		rc = fwrite(&conn->db->rows[i]->set, sizeof(int ), 1, conn->file);
+		if (rc != 1)
+			die("Cannot flush database", conn);
+	
+		//rc = fflush(conn->file);
+		//if (rc == -1)
+		//	die("Connot flush database", conn);
+		rc = fwrite(conn->db->rows[i]->name, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
+		if (rc != 1)
+			die("Cannot flush database", conn);
+	
+		//rc = fflush(conn->file);
+		//if (rc == -1)
+		//	die("Connot flush database", conn);
+		rc = fwrite(conn->db->rows[i]->email, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
+		if (rc != 1)
+			die("Cannot flush database", conn);
+	    
+		//rc = fflush(conn->file);
+		//if (rc == -1)
+		//	die("Connot flush database", conn);
+	}
+
 }
 
 // TODO
 void Database_create(struct Connection *conn)
 {
-
-// If I have connection I can get the MAX_DATA and conn->db->MAX_ROWS
-// I need to devise something to get those for local usage (or just use them directly but lets just get'em)
+	printf("Entering CREATE\n");	
+	// If I have connection I can get the MAX_DATA and conn->db->MAX_ROWS
     int i = 0;
 
-
-
-	//printf("AAA\n");
     for (i = 0; i < conn->db->MAX_ROWS; i++) {
         // make a prototype to initialize it
 
-		//printf("AAA\n");
         struct Address *addr = malloc(sizeof(struct Address));
-		//printf("BBB\n");
         conn->db->rows[i] = addr;
-        conn->db->rows[i]->id = i;
-        conn->db->rows[i]->set = 0;
-	    //printf("CCC\n");
+        addr->id = i+1;
+        addr->set = 0;
+        addr->name = malloc(sizeof(char ) * conn->db->MAX_DATA );
+        addr->email = malloc(sizeof(char ) * conn->db->MAX_DATA );
+
         // then just assign it
-    	//printf("DDD\n");
-    }
-    //printf("EEE\n");
-    //printf("SET : %d\n", conn->db->rows[(conn->db->MAX_ROWS)-1]->set );
-    //printf("FFF\n");
-
-/*
-	int i = 0;
-
-	for (i = 0; i < MAX_ROWS; i++) {
-		// make a prototype to initialize it
-		struct Address addr = {.id = i, .set = 0};
-		// then just assign it
-		conn->db->rows[i] = addr;
 	}
-*/
+	//printf("SET : %d\n", conn->db->rows[(conn->db->MAX_ROWS)-1]->set );
+    conn->db->rows[0]->id = 1;
+    conn->db->rows[0]->set = 1;
+    conn->db->rows[0]->name = "Hasan Abi";
+    conn->db->rows[0]->email = "hasan_abi@cimeyil.abc";
 }
 
-// DONE
+// TODO
 void Database_set(struct Connection *conn, int id, const char *name,
 	const char *email)
 {
-    //printf("Lets checkout our MAX_ROWS: %d\n", conn->db->MAX_ROWS);
-    //printf("Lets checkout our MAX_DATA: %d\n", conn->db->MAX_DATA);
-    //printf("AAA\n");
+	printf("Entering SET\n");	
     struct Address *addr = conn->db->rows[id];
-    //printf("BBB\n");
 
-    printf("SET : %d\n", conn->db->rows[id]->set );
-    //addr = *(conn->db->rows[id]);
-
-	//printf("AAA\n");
+	Address_print(addr);
     if (addr->set){
-    	//printf("BBB\n");
         die("Already set, delete it first", conn);
-    	//printf("CCC\n");
     }
 
-    //printf("CCCC\n");
     addr->set = 1;
-    // WARNING: bug, read the "How To BreakIt" and fix this
-	conn->db->rows[id]->name = malloc(sizeof(char) * conn->db->MAX_DATA);
-    char *res = strncpy(addr->name, name, conn->db->MAX_DATA);
+    // WARNING: bug, read the "How To BreakIt" and fix this TODO
+	printf("AAA\n");
+	//conn->db->rows[id]->name = malloc(sizeof(char) * conn->db->MAX_DATA);
+	printf("BBB\n");
+    char *res = strncpy(addr->name, name, (conn->db->MAX_DATA)-1);
+	printf("CCC\n");
     // demonstrate the strncpy bug
     if (!res)
         die("Name copy failed", conn);
 
-    //printf("DDD\n");
-	conn->db->rows[id]->email = malloc(sizeof(char) * conn->db->MAX_DATA);
-    res = strncpy(addr->email, email, conn->db->MAX_DATA);
-    //printf("DDD\n");
-    if (!res)
+	//conn->db->rows[id]->email = malloc(sizeof(char) * conn->db->MAX_DATA);
+	printf("DDD\n");
+    char *res2 = strncpy(addr->email, email, (conn->db->MAX_DATA)-1);
+	printf("EEE\n");
+    if (!res2)
         die("Name copy failed", conn);
 
-/*
-	struct Address *addr = &conn->db->rows[id];
-	if (addr->set)
-		die("Already set, delete it first", conn);
-
-	addr->set = 1;
-	// WARNING: bug, read the "How To BreakIt" ad fix this
-	char *res = strncpy(addr->name, name, MAX_DATA);
-	// demonstrate the strncpy bug
-	if (!res)
-		die("Name copy failed", conn);
-
-	res = strncpy(addr->name, name, MAX_DATA);
-	if (!res)
-		die("Name copy failed", conn);
-*/
+	printf("Exiting SET\n");	
 }
 
-// TODO
+// NOTODO
 void Database_get(struct Connection *conn, int id)
 {
+	printf("Entering GET\n");
 	struct Address *addr = conn->db->rows[id];
 	
 	if (addr->set) {
@@ -248,30 +307,30 @@ void Database_get(struct Connection *conn, int id)
 	}
 }
 
-// TODO
+// NOTODO
 void Database_delete(struct Connection *conn, int id)
 {
-	if (conn->db->rows[id]->set == 0) {//cond for already unset
+	printf("Entering DELETE\n");
+	if (conn->db->rows[id]->set == 0) {
+		//cond for already unset
 		;
-	} else { // cond for set
+	} else { 
+		// needs deletion
 		conn->db->rows[id]->id = id;
 		conn->db->rows[id]->set = 0;
 		conn->db->rows[id]->email = NULL;
 		conn->db->rows[id]->name = NULL;
 	}
-
-	//struct Address addr = {.id = id, .set = 0};
-	//conn->db->rows[id] = addr;
 }
 
-// TODO
+// NOTODO
 void Database_list(struct Connection *conn)
 {
+	printf("Entering LIST\n");
 	int i = 0;
-	struct Database *db = conn->db;
 	
 	for(i = 0; i < conn->db->MAX_ROWS; i++) {
-		struct Address *cur = db->rows[i];
+		struct Address *cur = conn->db->rows[i];
 
 		if (cur->set) {
 			Address_print(cur);
@@ -280,44 +339,53 @@ void Database_list(struct Connection *conn)
 }
 
 int main(int argc, char *argv[])
-{
-	// As we are now still developing some checks are disabled.
-	/* 
-	if(argc<3)
-		die("USAGE: ex17 <dbfile> <action> [action params] <MAX_DATA> <MAX_ROWS>", NULL);
+{	
+	printf("Your argc is :%d\n", argc);
+	int i = 0;
+	for(i = 0; i<argc;i++){
+		printf("@%d : %s.\n",i,argv[i]);
+	}
+	if(argc<5)
+		die("USAGE: ex17 <dbfile> <MAX_DATA> <MAX_ROWS> <action> [action params]", NULL);
 
+	int MAX_DATA = atoi(argv[2]);
+	int MAX_ROWS = atoi(argv[3]);
 	
 	char *filename = argv[1];
-	char action = argv[2][0];
-	struct Connection *conn = Database_open(filename, action);
+	char action = argv[4][0];
+	struct Connection *conn = Database_open(filename, action, MAX_ROWS, MAX_DATA);
 	int id = 0;
 
-	if (argc > 3) id= atoi(argv[3]);
-	if (id >= MAX_ROWS) die("There's not that many records.", conn);
+	if (argc > 5) id= atoi(argv[5]);
+	if (id > MAX_ROWS) die("There's not that many records.", conn);
 	
 	switch (action) {
 		case 'c':
-			Database_create(conn);
+			//Database_create(conn);
 			Database_write(conn);
 			break;
 
 		case 'g':
-			if (argc != 4)
+			if (argc != 6)
 				die("Need an id to get", conn);
 
 			Database_get(conn, id);
 			break;
 	
 		case 's':
-			if (argc != 6)
+			if (argc != 8)
 				die("Need id, name, email to set", conn);
 		
-			Database_set(conn, id, argv[4], argv[5]);
+			printf("b4 set\n");
+			Database_set(conn, id-1, argv[6], argv[7]);
+			printf("After set\n");
+			printf("b4 write\n");
 			Database_write(conn);
+			printf("After write\n");
 			break;
 
 		case 'd':
-			if (argc != 4)
+			if (argc != 6)
 				die("Need id to delete", conn);
 		
 			Database_delete(conn, id);
@@ -330,48 +398,8 @@ int main(int argc, char *argv[])
 		default:
 			die("Invalid saction: c=create, g=get, s=set, d=del, l=list", conn);
 	}
-	*/
 
-	int MAX_DATA = 32;
-    int MAX_ROWS = 3;
-
-    /* 
-     * struct Address addr = {.id = 0, .name = "what?my Name is!" };
-     * printf("Print myName: %s\n", addr.name);
-     */
-
-    const char *filename = "Hasan";
-    char action = 'c';
-
-    struct Connection *conn = Database_open(filename, action, MAX_ROWS, MAX_DATA);
-
-    // I should be able to create a proper CONN struct 
-    // Now I can try my shenanigans!!
-
-    printf("Lets print Size of Connection %lu\n", sizeof(struct Connection));
-    printf("Lets print Size of Database %lu\n", sizeof(struct Database ));
-
-    // These will be use to check MAX_DATA and MAX_ROWS 
-    //printf("Lets print Size of Database %lu\n", sizeof(struct Database ));
-    //printf("Lets print Size of Address %lu\n", sizeof(struct Address ));
-
-
-    int id = 1;
-    char *name = "Kel";
-    char *email = "mahmut@greetings.com";
-
-    printf("Entering create\n");
-    Database_create(conn);
-    printf("Exited create\n");
-
-    printf("Lets print Size of created DB %lu\n", sizeof(**conn->db->rows));
-    printf("Entering set\n");
-    Database_set(conn, id, name, email);
-    printf("Exiting set\n");
-
-	Address_print(conn->db->rows[1]);
-
-    die("Till next time !\n",conn);
+	//Database_list(conn);
 
 	return 0;
 }
