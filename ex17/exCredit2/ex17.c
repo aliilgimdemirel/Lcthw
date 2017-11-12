@@ -62,11 +62,7 @@ void die(const char *message, struct Connection *conn)
 void Address_print(struct Address *addr)
 {
 	printf("Entering ADD_PRINT\n");	
-	printf("%d\n", addr->id);
-	printf("%d\n", addr->set);
-	//printf("AAA\n");	
-	printf("%s\n", addr->name);
-	printf("%s\n", addr->email);
+	printf("id:%d\t set:%d\t name:%s, email:%s\n ", addr->id, addr->set, addr->name, addr->email);
 	
 	//char *byte1 = addr->name;
 	//char *byte2 = addr->name;
@@ -153,7 +149,7 @@ struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, 
         conn->file = fopen(filename, "r+");
 		if (conn->file) {
 			Database_load(conn);
-			Address_print(conn->db->rows[0]);
+			//Address_print(conn->db->rows[0]);
 		}
     }
 
@@ -268,26 +264,25 @@ void Database_set(struct Connection *conn, int id, const char *name,
 	printf("Entering SET\n");	
     struct Address *addr = conn->db->rows[id];
 
-	Address_print(addr);
     if (addr->set){
         die("Already set, delete it first", conn);
     }
 
     addr->set = 1;
     // WARNING: bug, read the "How To BreakIt" and fix this TODO
-	printf("AAA\n");
+	//printf("AAA\n");
 	//conn->db->rows[id]->name = malloc(sizeof(char) * conn->db->MAX_DATA);
-	printf("BBB\n");
+	//printf("BBB\n");
     char *res = strncpy(addr->name, name, (conn->db->MAX_DATA)-1);
-	printf("CCC\n");
+	//printf("CCC\n");
     // demonstrate the strncpy bug
     if (!res)
         die("Name copy failed", conn);
 
 	//conn->db->rows[id]->email = malloc(sizeof(char) * conn->db->MAX_DATA);
-	printf("DDD\n");
+	//printf("DDD\n");
     char *res2 = strncpy(addr->email, email, (conn->db->MAX_DATA)-1);
-	printf("EEE\n");
+	//printf("EEE\n");
     if (!res2)
         die("Name copy failed", conn);
 
@@ -341,10 +336,10 @@ void Database_list(struct Connection *conn)
 int main(int argc, char *argv[])
 {	
 	printf("Your argc is :%d\n", argc);
-	int i = 0;
-	for(i = 0; i<argc;i++){
-		printf("@%d : %s.\n",i,argv[i]);
-	}
+	//int i = 0;
+	//for(i = 0; i<argc;i++){
+	//	printf("@%d : %s.\n",i,argv[i]);
+	//}
 	if(argc<5)
 		die("USAGE: ex17 <dbfile> <MAX_DATA> <MAX_ROWS> <action> [action params]", NULL);
 
