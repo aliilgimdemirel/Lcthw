@@ -35,13 +35,22 @@ struct Connection {
 void Database_close(struct Connection *conn)
 {
 	printf("Entering CLOSE\n");
-	//if (conn) {
-	//	if (conn->file)
-	//		fclose(conn->file);
-	//	if (conn->db)
-	//		free(conn->db);
-	//	free(conn);
-	//}
+	if (conn) {
+		if (conn->file)
+			fclose(conn->file);
+		if (conn->db) {
+			int i = 0;
+			for (i = 0; i < conn->db->MAX_ROWS; i++){
+				printf("freed %d!", i);
+				free(conn->db->rows[i]->name);
+				free(conn->db->rows[i]->email);
+				free(conn->db->rows[i]);
+			}
+			free(conn->db->rows);
+			free(conn->db);
+		}
+		free(conn);
+	}
 }
 
 void die(const char *message, struct Connection *conn)
@@ -232,30 +241,25 @@ void Database_write(struct Connection *conn)
 }
 
 // TODO
-void Database_create(struct Connection *conn)
-{
-	printf("Entering CREATE\n");	
-	// If I have connection I can get the MAX_DATA and conn->db->MAX_ROWS
-    int i = 0;
-
-    for (i = 0; i < conn->db->MAX_ROWS; i++) {
-        // make a prototype to initialize it
-
-        struct Address *addr = malloc(sizeof(struct Address));
-        conn->db->rows[i] = addr;
-        addr->id = i+1;
-        addr->set = 0;
-        addr->name = malloc(sizeof(char ) * conn->db->MAX_DATA );
-        addr->email = malloc(sizeof(char ) * conn->db->MAX_DATA );
-
-        // then just assign it
-	}
-	//printf("SET : %d\n", conn->db->rows[(conn->db->MAX_ROWS)-1]->set );
-    conn->db->rows[0]->id = 1;
-    conn->db->rows[0]->set = 1;
-    conn->db->rows[0]->name = "Hasan Abi";
-    conn->db->rows[0]->email = "hasan_abi@cimeyil.abc";
-}
+//void Database_create(struct Connection *conn)
+//{
+//	printf("Entering CREATE\n");	
+//	// If I have connection I can get the MAX_DATA and conn->db->MAX_ROWS
+//    int i = 0;
+//
+//    for (i = 0; i < conn->db->MAX_ROWS; i++) {
+//        // make a prototype to initialize it
+//
+//        struct Address *addr = malloc(sizeof(struct Address));
+//        conn->db->rows[i] = addr;
+//        addr->id = i+1;
+//        addr->set = 0;
+//        addr->name = malloc(sizeof(char ) * conn->db->MAX_DATA );
+//        addr->email = malloc(sizeof(char ) * conn->db->MAX_DATA );
+//
+//        // then just assign it
+//	}
+//}
 
 // TODO
 void Database_set(struct Connection *conn, int id, const char *name,
@@ -394,7 +398,7 @@ int main(int argc, char *argv[])
 			die("Invalid saction: c=create, g=get, s=set, d=del, l=list", conn);
 	}
 
-	//Database_list(conn);
+	Database_close(conn);
 
 	return 0;
 }
