@@ -1,0 +1,35 @@
+#!/bin/bash
+
+make all; 
+
+echo "./ex17 db.dat 40 5 c"
+./ex17 db.dat 40 5 c
+echo "./ex17 db.dat 40 5 s 1 ali veli@kimmeyil.hjk"
+./ex17 db.dat 40 5 s 1 ali veli@kimmeyil.hjk
+echo "./ex17 db.dat 40 5 s 2 ilgim milgim@kimmeyil.hjk"
+./ex17 db.dat 40 5 s 2 ilgim milgim@kimmeyil.hjk
+echo "./ex17 db.dat 40 5 s 3 demirel kemirel@kimmeyil.hjk"
+./ex17 db.dat 40 5 s 3 demirel kemirel@kimmeyil.hjk
+
+echo "./ex17 db.dat 40 5 l"
+./ex17 db.dat 40 5 l
+
+echo "./ex17 db.dat 40 5 g 1"
+./ex17 db.dat 40 5 g 1
+echo "./ex17 db.dat 40 5 g 2"
+./ex17 db.dat 40 5 g 2
+echo "./ex17 db.dat 40 5 g 3"
+./ex17 db.dat 40 5 g 3
+echo "./ex17 db.dat 40 5 g 4"
+./ex17 db.dat 40 5 g 4
+echo "./ex17 db.dat 40 5 g 12"
+./ex17 db.dat 40 5 g 12
+
+echo "./ex17 db.dat 40 5 d 2"
+./ex17 db.dat 40 5 d 2 
+
+echo "./ex17 db.dat 40 5 g 2"
+./ex17 db.dat 40 5 g 2
+
+echo "./ex17 db.dat 40 5 l"
+./ex17 db.dat 40 5 l
