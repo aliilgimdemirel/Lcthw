@@ -47,7 +47,7 @@ struct Connection {
 // NOTODO
 void Database_close(struct Connection *conn)
 {
-	printf("Entering CLOSE\n"); // debug
+// 	printf("Entering CLOSE\n"); // debug
 	if (conn) {
 		if (conn->file)
 			fclose(conn->file);
@@ -63,12 +63,12 @@ void Database_close(struct Connection *conn)
 		}
 		free(conn);
 	}
-	printf("Exiting CLOSE\n"); // debug
+// 	printf("Exiting CLOSE\n"); // debug
 }
 
 void die(const char *message, struct Connection *conn)
 {
-	printf("Entering DIE\n"); // debug
+// 	printf("Entering DIE\n"); // debug
 	if (errno) {
 		perror(message);
 	} else {
@@ -78,13 +78,13 @@ void die(const char *message, struct Connection *conn)
 	Database_close(conn);
 
 	exit(1);
-	printf("Exiting DIE\n"); // debug
+// 	printf("Exiting DIE\n"); // debug
 }
 
 // NOTODO
 void Address_print(struct Address *addr)
 {
-	printf("id:%d\t set:%d\t name:%s, email:%s\n ", addr->id, addr->set, addr->name, addr->email);
+	printf("id:%d\t set:%d\t name:%s, email:%s\n", addr->id, addr->set, addr->name, addr->email);
 }
 
 // NOTODO
@@ -92,7 +92,7 @@ void Address_print(struct Address *addr)
 // But that logic is inside Database_open
 void Database_load(struct Connection *conn)
 {
-	printf("Entering LOAD\n"); // debug	
+// 	printf("Entering LOAD\n"); // debug
 	rewind(conn->file);
 
 	int rc = 0;
@@ -107,14 +107,14 @@ void Database_load(struct Connection *conn)
 		if (rc != 1)
 			die("Failed to load database.\n", conn);
 	}
-	printf("Exiting LOAD\n"); // debug	
+// 	printf("Exiting LOAD\n"); // debug
 }
 
 // NOTODO
 // 1- MAX_DATA & MAX_ROWS should be put inside DB here. [DONE]
 struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, int MAX_DATA)
 {
-	printf("Entering OPEN\n"); // debug
+// 	printf("Entering OPEN\n"); // debug
     struct Connection *conn = malloc(sizeof(struct Connection));
     if (!conn)
         die("Memory error", conn);
@@ -151,34 +151,30 @@ struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, 
     if (!conn->file)
         die("Failed to open the file.\n", conn);
 	
-	printf("Exiting OPEN\n"); // debug
+// 	printf("Exiting OPEN\n"); // debug
     return conn;
 };
 
 // TODO
 void Database_create(struct Connection *conn)
 {
-	printf("Entering CREATE\n"); // debug
+// 	printf("Entering CREATE\n"); // debug
 	int i = 0;
 	
 	for (i = 0; i < conn->db->MAX_ROWS; i++) {
 		// make a prototype to initialize it
-		struct Address *addr = malloc(sizeof(struct Address));
-		conn->db->rows[i] = addr;
-		addr->id = i+1;
-		addr->set = 0;
-		addr->name = malloc(sizeof(char ) * conn->db->MAX_DATA );
-		addr->email = malloc(sizeof(char ) * conn->db->MAX_DATA );
+		memset(conn->db->rows[i]->email, 0, conn->db->MAX_DATA);
+		memset(conn->db->rows[i]->name, 0, conn->db->MAX_DATA);
 		// then just assign it
 	}
-	printf("Entering CREATE\n"); // debug
+// 	printf("Entering CREATE\n"); // debug
 }
 
 
 // TODO
 void Database_write(struct Connection *conn)
 {
-	printf("Entering WRITE\n"); // debug
+// 	printf("Entering WRITE\n"); // debug
 	rewind(conn->file);
 
 	int i = 0;
@@ -200,14 +196,14 @@ void Database_write(struct Connection *conn)
 		if (rc != 1)
 			die("Cannot flush database", conn);
 	}
-	printf("Exiting WRITE\n"); // debug
+// 	printf("Exiting WRITE\n"); // debug
 }
 
 // TODO
 void Database_set(struct Connection *conn, int id, const char *name,
 	const char *email)
 {
-	printf("Entering SET\n"); //debug
+// 	printf("Entering SET\n"); // debug
     struct Address *addr = conn->db->rows[id];
 
     if (addr->set){
@@ -225,13 +221,13 @@ void Database_set(struct Connection *conn, int id, const char *name,
     if (!res2)
         die("Name copy failed", conn);
 
-	printf("Exiting SET\n"); // debug
+// 	printf("Exiting SET\n"); // debug
 }
 
 // NOTODO
 void Database_get(struct Connection *conn, int id)
 {
-	printf("Entering GET\n"); // debug
+// 	printf("Entering GET\n"); // debug
 	struct Address *addr = conn->db->rows[id];
 	
 	if (addr->set) {
@@ -239,30 +235,34 @@ void Database_get(struct Connection *conn, int id)
 	} else {
 		die("Id is not set", conn);
 	}
-	printf("Exiting GET\n"); // debug
+// 	printf("Exiting GET\n"); // debug
 }
 
 // NOTODO
 void Database_delete(struct Connection *conn, int id)
 {
-	printf("Entering DELETE\n"); // debug
+// 	printf("Entering DELETE\n"); // debug
 	if (conn->db->rows[id]->set == 0) {
 		//cond for already unset
 		;
 	} else { 
 		// needs deletion
+		printf("debug\n"); // debug
 		conn->db->rows[id]->id = id;
 		conn->db->rows[id]->set = 0;
-		conn->db->rows[id]->email = NULL;
-		conn->db->rows[id]->name = NULL;
+		memset(conn->db->rows[id]->email, 0, conn->db->MAX_DATA);
+		memset(conn->db->rows[id]->name, 0, conn->db->MAX_DATA);
+		//conn->db->rows[id]->name = NULL;
+		printf("debug\n"); // debug
+		Address_print(conn->db->rows[id]);
 	}
-	printf("Exiting DELETE\n"); // debug
+// 	printf("Exiting DELETE\n"); // debug
 }
 
 // NOTODO
 void Database_list(struct Connection *conn)
 {
-	printf("Entering LIST\n"); // debug
+// 	printf("Entering LIST\n"); // debug
 	int i = 0;
 	
 	for(i = 0; i < conn->db->MAX_ROWS; i++) {
@@ -272,12 +272,12 @@ void Database_list(struct Connection *conn)
 			Address_print(cur);
 		}
 	}
-	printf("Exiting LIST\n"); // debug
+// 	printf("Exiting LIST\n"); // debug
 }
 
 int main(int argc, char *argv[])
 {	
-	printf("Your argc is :%d\n", argc);
+	//printf("Your argc is :%d\n", argc);
 	//int i = 0;
 	//for(i = 0; i<argc;i++){
 	//	printf("@%d : %s.\n",i,argv[i]);
@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
 	
 	switch (action) {
 		case 'c':
-			//Database_create(conn);
+			Database_create(conn);
 			Database_write(conn);
 			break;
 
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
 			if (argc != 6)
 				die("Need an id to get", conn);
 
-			Database_get(conn, id);
+			Database_get(conn, id-1);
 			break;
 	
 		case 's':
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 			if (argc != 6)
 				die("Need id to delete", conn);
 		
-			Database_delete(conn, id);
+			Database_delete(conn, id-1);
 			Database_write(conn);
 			break;
 			
