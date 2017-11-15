@@ -1,7 +1,7 @@
 // TODO LIST
-// 1- make DEBUG option
-// 2- solve the create/intialization thing
-// 3- Make the python/bash script
+// [Postponed ]1- make DEBUG option // Will come after 2 more exercises.
+// [DONE] 2- solve the create/intialization thing
+// [DONE] 3- Make the python/bash script
 // TODO LIST
 
 //Heap and Stack Memory Allocation
@@ -35,7 +35,6 @@ struct Address {
 struct Database {
 	int MAX_ROWS;
 	int MAX_DATA;
-	//struct Address rows[MAX_ROWS];
 	struct Address **rows; // there is 2 level of indirection to the struct Address.
 };
 
@@ -277,11 +276,6 @@ void Database_list(struct Connection *conn)
 
 int main(int argc, char *argv[])
 {	
-	//printf("Your argc is :%d\n", argc);
-	//int i = 0;
-	//for(i = 0; i<argc;i++){
-	//	printf("@%d : %s.\n",i,argv[i]);
-	//}
 	if(argc<5)
 		die("USAGE: ex17 <dbfile> <MAX_DATA> <MAX_ROWS> <action> [action params]", NULL);
 
