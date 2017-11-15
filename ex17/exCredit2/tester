@@ -33,3 +33,6 @@ echo "./ex17 db.dat 40 5 g 2"
 
 echo "./ex17 db.dat 40 5 l"
 ./ex17 db.dat 40 5 l
+
+echo "./ex17 db.dat 40 6 l"
+./ex17 db.dat 40 6 l
