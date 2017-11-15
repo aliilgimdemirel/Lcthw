@@ -2,6 +2,8 @@
 // [Postponed ]1- make DEBUG option // Will come after 2 more exercises.
 // [DONE] 2- solve the create/intialization thing
 // [DONE] 3- Make the python/bash script
+// [DONE] 4- Need to write to the DB what MAX_ROWS & MAX_DATA it is using,
+// and devise a control b4 loading or writing. 
 // TODO LIST
 
 //Heap and Stack Memory Allocation
@@ -43,7 +45,6 @@ struct Connection {
 	struct Database *db;
 };
 
-// NOTODO
 void Database_close(struct Connection *conn)
 {
 // 	printf("Entering CLOSE\n"); // debug
@@ -80,25 +81,45 @@ void die(const char *message, struct Connection *conn)
 // 	printf("Exiting DIE\n"); // debug
 }
 
-// NOTODO
 void Address_print(struct Address *addr)
 {
 	printf("id:%d\t set:%d\t name:%s, email:%s\n", addr->id, addr->set, addr->name, addr->email);
 }
 
-// NOTODO
-// can make the load search for db's and matching MAX_DATA&MAX_ROWS?
-// But that logic is inside Database_open
+void Database_file_attributes_checker(struct Connection *conn, char mode, const char * filename)
+{
+// 	printf("Entering ATTR_CHK\n"); // debug
+	int rc = 0;	
+	int check = 0;
+
+	rc = fread(&check, sizeof(int ), 1, conn->file);
+	if (rc != 1)
+		die("Cannot flush database", conn);
+	if (check != conn->db->MAX_DATA){
+		die("The file does not contain the desired MAX_DATA value", conn);
+	}
+	
+	rc = fread(&check, sizeof(int ), 1, conn->file);
+	if (rc != 1)
+		die("Cannot flush database", conn);
+	if (check != conn->db->MAX_ROWS){
+		die("The file does not contain the desired MAX_ROWS value", conn);
+	}
+// 	printf("Exiting ATTR_CHK\n"); // debug
+}
+
 void Database_load(struct Connection *conn)
 {
 // 	printf("Entering LOAD\n"); // debug
 	rewind(conn->file);
+	fseek(conn->file, 8, SEEK_SET);
 
 	int rc = 0;
 	int i = 0;
+
 	for ( i = 0; i < conn->db->MAX_ROWS; i++)	
 	{
-		// the usage of rc here is xtremely stupid.
+		// the usage of rc here is xtremely stupid. TODO
 		rc = fread(&conn->db->rows[i]->id, sizeof(int), 1, conn->file);
 		rc = fread(&conn->db->rows[i]->set, sizeof(int), 1, conn->file);
 		rc = fread(conn->db->rows[i]->name, sizeof(char) * conn->db->MAX_DATA, 1, conn->file);
@@ -109,8 +130,6 @@ void Database_load(struct Connection *conn)
 // 	printf("Exiting LOAD\n"); // debug
 }
 
-// NOTODO
-// 1- MAX_DATA & MAX_ROWS should be put inside DB here. [DONE]
 struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, int MAX_DATA)
 {
 // 	printf("Entering OPEN\n"); // debug
@@ -142,8 +161,8 @@ struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, 
     } else {
         conn->file = fopen(filename, "r+");
 		if (conn->file) {
+			Database_file_attributes_checker(conn, mode, filename);
 			Database_load(conn);
-			//Address_print(conn->db->rows[0]);
 		}
     }
 
@@ -154,33 +173,41 @@ struct Connection *Database_open(const char *filename, char mode, int MAX_ROWS, 
     return conn;
 };
 
-// TODO
 void Database_create(struct Connection *conn)
 {
 // 	printf("Entering CREATE\n"); // debug
 	int i = 0;
+	int rc = 0;
+
+	rewind(conn->file);
 	
+	rc = fwrite(&conn->db->MAX_DATA, sizeof(int ), 1, conn->file);
+	if (rc != 1)
+		die("Cannot flush database", conn);
+	rc = fwrite(&conn->db->MAX_ROWS, sizeof(int ), 1, conn->file);
+	if (rc != 1)
+		die("Cannot flush database", conn);
+		
 	for (i = 0; i < conn->db->MAX_ROWS; i++) {
-		// make a prototype to initialize it
 		memset(conn->db->rows[i]->email, 0, conn->db->MAX_DATA);
 		memset(conn->db->rows[i]->name, 0, conn->db->MAX_DATA);
-		// then just assign it
 	}
-// 	printf("Entering CREATE\n"); // debug
+// 	printf("Exiting CREATE\n"); // debug
 }
 
 
-// TODO
 void Database_write(struct Connection *conn)
 {
 // 	printf("Entering WRITE\n"); // debug
 	rewind(conn->file);
-
+	fseek(conn->file, 8, SEEK_SET);
+	
+	int rc = 0;
 	int i = 0;
 
 	for(i = 0; i < conn->db->MAX_ROWS; i++)
 	{	
-		int rc = fwrite(&conn->db->rows[i]->id, sizeof(int ), 1, conn->file);
+		rc = fwrite(&conn->db->rows[i]->id, sizeof(int ), 1, conn->file);
 		if (rc != 1)
 			die("Cannot flush database", conn);
 		rc = fwrite(&conn->db->rows[i]->set, sizeof(int ), 1, conn->file);
@@ -223,7 +250,6 @@ void Database_set(struct Connection *conn, int id, const char *name,
 // 	printf("Exiting SET\n"); // debug
 }
 
-// NOTODO
 void Database_get(struct Connection *conn, int id)
 {
 // 	printf("Entering GET\n"); // debug
@@ -237,7 +263,6 @@ void Database_get(struct Connection *conn, int id)
 // 	printf("Exiting GET\n"); // debug
 }
 
-// NOTODO
 void Database_delete(struct Connection *conn, int id)
 {
 // 	printf("Entering DELETE\n"); // debug
@@ -246,19 +271,15 @@ void Database_delete(struct Connection *conn, int id)
 		;
 	} else { 
 		// needs deletion
-		printf("debug\n"); // debug
 		conn->db->rows[id]->id = id;
 		conn->db->rows[id]->set = 0;
 		memset(conn->db->rows[id]->email, 0, conn->db->MAX_DATA);
 		memset(conn->db->rows[id]->name, 0, conn->db->MAX_DATA);
 		//conn->db->rows[id]->name = NULL;
-		printf("debug\n"); // debug
-		Address_print(conn->db->rows[id]);
 	}
 // 	printf("Exiting DELETE\n"); // debug
 }
 
-// NOTODO
 void Database_list(struct Connection *conn)
 {
 // 	printf("Entering LIST\n"); // debug
@@ -330,3 +351,12 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+
+//%s/^\(\/\/\)\( \/\/\)\(.*\)\(\/\/ debug\)$/\1\3\4
+//if u've put extra _//_ by mistake etc. at the beginning, this is to remove them
+
+//%s/^\(\/\/\)\(.*\)\(\/\/ debug\)$/\2\3
+//will RMV leading //s 
+
+//%s/\(.*\)\(\/\/ debug\)$/\/\/\1\2
+//will PUT leading //s
