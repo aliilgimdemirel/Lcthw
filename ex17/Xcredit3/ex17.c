@@ -295,6 +295,64 @@ void Database_list(struct Connection *conn)
 // 	printf("Exiting LIST\n"); // debug
 }
 
+int Find_String(char *bigString, char *str, int bigLen, int smlLen)
+{
+ 	//printf("Entering FIND_STR\n"); // debug
+	int i = 0;
+	int j = 0;
+	int flag1 = 0;
+
+	for (i = 0; i < bigLen - smlLen; i++ ) {
+		flag1 = 0;
+		for (j = 0; j < smlLen; j++) {
+			//printf("CHARbig: %c\t CHARfind: %c\n", bigString[i+j], str[j]); // debug
+			if(bigString[i+j] != str[j]) {
+				flag1 = 1;
+			}
+		}
+		if ( flag1 == 0){
+			return 1;
+		}
+	}		
+ 	//printf("Exiting FIND_STR\n"); // debug
+	return 0;
+}
+
+void Database_find(struct Connection *conn, char *findString, char *field)
+{
+ 	//printf("Entering DB_FIND\n"); // debug
+	int i = 0;
+	
+	if( !strcmp(field, "name") ) {
+		for(i = 0; i < conn->db->MAX_ROWS; i++) {
+			struct Address *cur = conn->db->rows[i];
+			
+			if (cur->set) {
+				if ( Find_String(cur->name, findString, conn->db->MAX_DATA, strlen(findString)) )  {
+					printf("Found match at id:\t%d. Printing;\n", i+1);
+					Address_print(cur);
+				}
+			}
+		}
+	}
+	else if( !strcmp(field, "email") ) {
+		for(i = 0; i < conn->db->MAX_ROWS; i++) {
+			struct Address *cur = conn->db->rows[i];
+			
+			if (cur->set) {
+				if ( Find_String(cur->email, findString, conn->db->MAX_DATA, strlen(findString)) )  {
+					printf("Found match at id:\t%d. Printing;\n", i+1);
+					Address_print(cur);
+				}
+			}
+		}
+	}
+	else {
+		die("Wrong Address field try 'name' or 'email'", conn);
+	}
+ 	//printf("Exiting DB_FIND\n"); // debug
+}
+
 int main(int argc, char *argv[])
 {	
 	if(argc<5)
@@ -343,6 +401,14 @@ int main(int argc, char *argv[])
 		case 'l':
 			Database_list(conn);
 			break;
+
+		case 'f':
+			if (argc != 7)
+				die("Need a string to search and a field to search it in", conn);
+		
+			Database_find(conn, argv[5], argv[6]);
+			break;
+
 		default:
 			die("Invalid saction: c=create, g=get, s=set, d=del, l=list", conn);
 	}

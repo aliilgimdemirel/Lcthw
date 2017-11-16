@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -e
 
 make all; 
 
@@ -36,3 +37,6 @@ echo "./ex17 db.dat 40 5 l"
 
 echo "./ex17 db.dat 40 6 l"
 ./ex17 db.dat 40 6 l
+
+echo "./ex17 db.dat 40 5 f hjk email"
+./ex17 db.dat 40 5 f hjk email
