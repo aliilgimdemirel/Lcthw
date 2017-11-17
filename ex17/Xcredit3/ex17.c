@@ -302,7 +302,7 @@ int Find_String(char *bigString, char *str, int bigLen, int smlLen)
 	int j = 0;
 	int flag1 = 0;
 
-	for (i = 0; i < bigLen - smlLen; i++ ) {
+	for (i = 0; i < bigLen - (smlLen + 1); i++ ) {
 		flag1 = 0;
 		for (j = 0; j < smlLen; j++) {
 			//printf("CHARbig: %c\t CHARfind: %c\n", bigString[i+j], str[j]); // debug
