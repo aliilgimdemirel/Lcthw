@@ -1,42 +1,39 @@
 #!/bin/bash
-#set -e
+set -e
 
 make all; 
 
-echo "./ex17 db.dat 40 5 c"
-./ex17 db.dat 40 5 c
-echo "./ex17 db.dat 40 5 s 1 ali veli@kimmeyil.hjk"
-./ex17 db.dat 40 5 s 1 ali veli@kimmeyil.hjk
-echo "./ex17 db.dat 40 5 s 2 ilgim milgim@kimmeyil.hjk"
-./ex17 db.dat 40 5 s 2 ilgim milgim@kimmeyil.hjk
-echo "./ex17 db.dat 40 5 s 3 demirel kemirel@kimmeyil.hjk"
-./ex17 db.dat 40 5 s 3 demirel kemirel@kimmeyil.hjk
+echo "./ex17 st.dat 8 create"
+./ex17 st.dat 8 create
+echo "./ex17 st.dat 8 push 567"
+./ex17 st.dat 8 push 567
+echo "./ex17 st.dat 8 push 789"
+./ex17 st.dat 8 push 789
+echo "./ex17 st.dat 8 push 323423"
+./ex17 st.dat 8 push 323423
 
-echo "./ex17 db.dat 40 5 l"
-./ex17 db.dat 40 5 l
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 list
 
-echo "./ex17 db.dat 40 5 g 1"
-./ex17 db.dat 40 5 g 1
-echo "./ex17 db.dat 40 5 g 2"
-./ex17 db.dat 40 5 g 2
-echo "./ex17 db.dat 40 5 g 3"
-./ex17 db.dat 40 5 g 3
-echo "./ex17 db.dat 40 5 g 4"
-./ex17 db.dat 40 5 g 4
-echo "./ex17 db.dat 40 5 g 12"
-./ex17 db.dat 40 5 g 12
-
-echo "./ex17 db.dat 40 5 d 2"
-./ex17 db.dat 40 5 d 2 
-
-echo "./ex17 db.dat 40 5 g 2"
-./ex17 db.dat 40 5 g 2
-
-echo "./ex17 db.dat 40 5 l"
-./ex17 db.dat 40 5 l
-
-echo "./ex17 db.dat 40 6 l"
-./ex17 db.dat 40 6 l
-
-echo "./ex17 db.dat 40 5 f hjk email"
-./ex17 db.dat 40 5 f hjk email
+#echo "./ex17 st.dat 8 pop"
+#./ex17 st.dat 8 pop
+#echo "./ex17 st.dat 8 pop"
+#./ex17 st.dat 8 pop
+#echo "./ex17 st.dat 8 pop"
+#./ex17 st.dat 8 pop
+#echo "./ex17 st.dat 8 pop"
+#./ex17 st.dat 8 pop
+#echo "./ex17 st.dat 8 pop"
+#./ex17 st.dat 8 pop
+#
+#echo "./ex17 st.dat 8 listist"
+#./ex17 st.dat 8 listist 
+#
+#echo "./ex17 st.dat 8 pop"
+#./ex17 st.dat 8 pop
+#
+#echo "./ex17 st.dat 8 list"
+#./ex17 st.dat 8 list
+#
+#echo "./ex17 st.dat 8 f hjk email"
+#./ex17 st.dat 8 f hjk email
