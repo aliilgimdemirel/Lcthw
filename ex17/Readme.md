@@ -29,3 +29,10 @@ we need to change whole bunch of lines in a particular fashion. VI/VIM and regex
 * If you are trying to find out reasons of *seg. faults* via *printf()'s* then do now forget to put \\n's to the printf statement. My guess is that seg.fault promt ereases everything on that line ?
 ### Xcredit 4
 [This](http://www.catb.org/esr/structure-packing/) site has a lot of information on the topic. Goes along with [structure_declaration](http://en.cppreference.com/w/c/language/struct) and [bitfields](http://en.cppreference.com/w/cpp/language/bit_field).
+### Xcredit 8
+First I've done the task as a global variable with no file I/O.
+Then upgraded it to be with FIle I/O and where I needed for practice was shining like stars.
+* First I forgot to log my stackPtr.
+* Then realized the faulty way I was trying to do it. I was trying to store literally a ptr whree each time the program opens It becomes redundant or rather irrelevant, even nonsensicle. Then started to save my position in the stack and write/read it to the same file.
+* The array definition and mem.allocation was also important for me. As it seems, the subject was not fully understood by me at the time I started this piece of code.
+    * No wonder why array names act as an adress. You can just assign a space to it and it can wonder in that space by its type size. I guess an exercise with a 2D array should make the subject matter secure. 
