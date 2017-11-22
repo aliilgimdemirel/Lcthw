@@ -9,7 +9,7 @@
 
 struct Stack {
 	int *Array;
-	int *ArrayPtr;
+	int ArrayPos;
 	int MAX_STACK_SIZE;
 };
 
@@ -26,7 +26,6 @@ void Close_stack(struct Connection *conn)
             fclose(conn->file);
         if (conn->st) {
             free(conn->st->Array);
-            free(conn->st->ArrayPtr);
             free(conn->st);
         }
         free(conn);
@@ -51,21 +50,22 @@ void die(const char *message, struct Connection *conn)
 
 void Load_stack(struct Connection *conn)
 {
-	printf("Ent Load\n");
+//	printf("Ent Load\n"); // debug
 	rewind(conn->file);
-	
 	int i = 0;
 	int rc = 0;
 
+	rc = fread(&conn->st->ArrayPos, sizeof(int), 1, conn->file);
+	if ( rc != 1)
+		die("Failed to load Stack", conn);
+
 	for (i = 0; i < conn->st->MAX_STACK_SIZE; i++) {
-	printf("DEBUG\n");
-		rc = fread(conn->st->ArrayPtr++, sizeof(int), 1, conn->file);
-	printf("DEBUG\n");
+		rc = fread(conn->st->Array + i, sizeof(int), 1, conn->file);
 		if ( rc != 1)
 			die("Failed to load Stack", conn);
-	printf("DEBUG\n");
+//		printf("Loaded Value is:%d\n", *(conn->st->Array + i) ); // debug
 	}
-	printf("Ext Load\n");
+//	printf("Ext Load\n"); // debug
 }
 
 struct Connection *Stack_open(char *filename, char *command, int MAX_STACK_SIZE )
@@ -79,7 +79,7 @@ struct Connection *Stack_open(char *filename, char *command, int MAX_STACK_SIZE 
          die("Memory error", conn);
 
 	conn->st->Array = malloc( sizeof(int ) * MAX_STACK_SIZE );
-	conn->st->ArrayPtr = conn->st->Array;
+	conn->st->ArrayPos = 0;
 
 	conn->st->MAX_STACK_SIZE = MAX_STACK_SIZE;
 
@@ -111,21 +111,21 @@ void Init_stack(struct Connection *conn)
 
 void Pop_stack(struct Connection *conn)
 {
-	if ( conn->st->Array == conn->st->ArrayPtr )
-	{
+	if ( conn->st->ArrayPos == 0 ) {
 		die("stack is empty, cannot pop", conn);
 		return;
 	}
 
 	// Act of pop'ing is printf ! :D for now.
-	printf("content of popped element is: %d\n", --*(conn->st->ArrayPtr) );
-	*(conn->st->ArrayPtr) = 0;
+	conn->st->ArrayPos--;
+	printf("content of popped element is: %d\n", conn->st->Array[conn->st->ArrayPos] );
+	conn->st->Array[conn->st->ArrayPos] = 0;
 }
 
 void Push_stack(struct Connection *conn, int new_element)
 {
-	printf("Ent Push\n");
-	if ( abs(conn->st->Array - conn->st->ArrayPtr ) / 4 == 8) // 8 is the MAX_STACK_SIZE
+//	printf("Ent Push\n"); // debug
+	if ( conn->st->ArrayPos == 8) // 8 is the MAX_STACK_SIZE
 	{
 		die("stack is full cannot push more", conn);
 		return ;
@@ -135,10 +135,10 @@ void Push_stack(struct Connection *conn, int new_element)
 	//stackptr++;
 	//printf("content of pushed element is: %d\n", stack[stackptr-1]);
 
-	*(conn->st->ArrayPtr) = new_element;
-	conn->st->ArrayPtr++;
-	printf("content of pushed element is: %d\n", *(conn->st->ArrayPtr-1) );
-	printf("Ext Push\n");
+	conn->st->Array[conn->st->ArrayPos] = new_element;
+	conn->st->ArrayPos++;
+	printf("content of pushed element is: %d\n", conn->st->Array[conn->st->ArrayPos-1] );
+//	printf("Ext Push\n"); // debug
 }
 
 void List_stack(struct Connection *conn)
@@ -147,9 +147,12 @@ void List_stack(struct Connection *conn)
 
 	for (i = 0; i < conn->st->MAX_STACK_SIZE; i++)
 	{
-		printf("stack at pos:%d is:\t%d\n", i, conn->st->ArrayPtr++ );
+		printf("stack at pos:%d is:\t%d\n", i, *(conn->st->Array + i) ); 
+		// printf("stack at pos:%d is:\t%d\n", i, conn->st->Array[conn->st->ArrayPos] ); // WHY NOT WORKING ??
+		conn->st->ArrayPos++;
 	}
 }
+//		printf("Loaded Value is:%d\n", *(conn->st->Array + i) );
 
 void Write_stack(struct Connection *conn)
 {
@@ -158,8 +161,13 @@ void Write_stack(struct Connection *conn)
 	int i = 0;
 	int rc = 0;
 
+	rc = fwrite(&conn->st->ArrayPos, sizeof(int), 1, conn->file);
+	if ( rc != 1)
+	    die("Failed to load Stack", conn);
+
+
 	for (i = 0; i < conn->st->MAX_STACK_SIZE; i++) {
-        rc = fwrite(&conn->st->MAX_STACK_SIZE, sizeof(int), 1, conn->file);
+        rc = fwrite(conn->st->Array + i, sizeof(int), 1, conn->file);
         if ( rc != 1)
             die("Failed to load Stack", conn);
     }
@@ -198,19 +206,14 @@ int main(int argc, char *argv[])
 	int MAX_STACK_SIZE = atoi( argv[2] );
 	struct Connection *conn = Stack_open( filename, command, MAX_STACK_SIZE);
 
-
-
 	if( !strcmp(command, "create") ) {
-	printf("CREATE\n");
 		Init_stack(conn);
 		Write_stack(conn);
-	printf("CREATE\n");
 	} else if ( !strcmp(command, "pop") ){
 		// do things
 		Pop_stack(conn);
 		Write_stack(conn);
 	} else if ( !strcmp(command, "push") ){
-	printf("PUSH\n");
 		// do things
 		if (argc == 5){
 			// call pop
@@ -220,7 +223,6 @@ int main(int argc, char *argv[])
 		} else {
 			printf("Need 4 arguments for Push operation!\n");
 		}
-	printf("PUSH\n");
 	} else if ( !strcmp(command, "list") ){
 		// do things
 		List_stack(conn);

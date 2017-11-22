@@ -1,34 +1,44 @@
 #!/bin/bash
-set -e
+#set -e
 
 make all; 
 
 echo "./ex17 st.dat 8 create"
 ./ex17 st.dat 8 create
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 list
 echo "./ex17 st.dat 8 push 567"
 ./ex17 st.dat 8 push 567
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 list
 echo "./ex17 st.dat 8 push 789"
 ./ex17 st.dat 8 push 789
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 list
 echo "./ex17 st.dat 8 push 323423"
 ./ex17 st.dat 8 push 323423
 
 echo "./ex17 st.dat 8 list"
 ./ex17 st.dat 8 list
 
-#echo "./ex17 st.dat 8 pop"
-#./ex17 st.dat 8 pop
-#echo "./ex17 st.dat 8 pop"
-#./ex17 st.dat 8 pop
-#echo "./ex17 st.dat 8 pop"
-#./ex17 st.dat 8 pop
-#echo "./ex17 st.dat 8 pop"
-#./ex17 st.dat 8 pop
-#echo "./ex17 st.dat 8 pop"
-#./ex17 st.dat 8 pop
-#
-#echo "./ex17 st.dat 8 listist"
-#./ex17 st.dat 8 listist 
-#
+echo "./ex17 st.dat 8 pop"
+./ex17 st.dat 8 pop
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 list
+echo "./ex17 st.dat 8 pop"
+./ex17 st.dat 8 pop
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 list
+echo "./ex17 st.dat 8 pop"
+./ex17 st.dat 8 pop
+echo "./ex17 st.dat 8 pop"
+./ex17 st.dat 8 pop
+echo "./ex17 st.dat 8 pop"
+./ex17 st.dat 8 pop
+
+echo "./ex17 st.dat 8 list"
+./ex17 st.dat 8 listist 
+
 #echo "./ex17 st.dat 8 pop"
 #./ex17 st.dat 8 pop
 #
