@@ -1,0 +1,11 @@
+#!/bin/bash
+#set -e
+
+make all; 
+
+echo "./ex18 4 3 1 5 6"
+./ex18 4 3 1 5 6
+
+#echo "./ex18 4 3 0 1 i K l k 0 5 6"
+#./ex18 4 3 0 1 i K l k 0 5 6
+
