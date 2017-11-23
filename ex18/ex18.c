@@ -39,8 +39,12 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp)
 
 	memcpy( target, numbers, count * sizeof(int) );
 
+//	if( count == 1) {
+//		return target;
+//	}
+
 	for (i = 0; i < count; i++) {
-		for (j = 0; j < count; j++) {
+		for (j = 0; j < count - 1; j++) {
 			if( cmp( target[j], target[j + 1] ) > 0) {
 				temp = target[j+1];
 				target[j+1] = target[j];
