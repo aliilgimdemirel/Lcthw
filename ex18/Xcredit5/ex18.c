@@ -1,4 +1,4 @@
-//Heap and Stack Memory Allocation
+// Pointers To functions
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +22,10 @@ void die(const char *message)
 // a typedef creates a fake type, in this
 // case for a function pointer
 typedef int (*compare_cb)(int a, int b);
+
+typedef int *(*sort_array)(int *array, int count);
+
+typedef int (*find_extreme_pos)(int *array, int count);
 
 /**
  * A classic bubble sort function that uses the
@@ -66,11 +70,26 @@ int find_min_pos(int *array, int count)
 	return minPos;
 }
 
+int find_max_pos(int *array, int count)
+{
+	int i = 0;
+	int maxPos = 0;
+	int max = array[maxPos];
+
+	for (i = 0; i < count - 1; i++) {
+		if (max < array[i+1] ) {
+			maxPos = i+1;
+			max = array[i+1];
+		}
+	}
+	return maxPos;
+}
+
 // This is selection sort implementation without 
 // the linked list data structure. 
 // The "removal" from unsorted is imitated via sending
 // to end and giving the find_min a decremented count.
-int *selection_sort(int *numbers, int count)
+int *selection_sort(int *numbers, int count, find_extreme_pos pos)
 {
 	int size = count * sizeof(int);
 	int *unsorted = malloc(size);
@@ -85,7 +104,7 @@ int *selection_sort(int *numbers, int count)
 	memcpy(unsorted, numbers, size);
 
 	for (i = 0; i < count; i++) {
-		minPos = find_min_pos(unsorted, newCount);
+		minPos = pos(unsorted, newCount);
 		sorted[i] = unsorted[minPos];
 		//swap
 		temp = unsorted[newCount-1];
@@ -122,12 +141,12 @@ int strange_order(int a, int b)
  * Used to test that we are sorting things correctly
  * by doing the sort and printing it out.
  */
-void test_sorting(int *numbers, int count, compare_cb cmp)
+void test_sorting(int *numbers, int count, compare_cb cmp, find_extreme_pos extreme)
 {
 	int i = 0;
 	int *sorted = bubble_sort(numbers, count, cmp);
 	
-	int *sel_sorted = selection_sort(numbers, count);
+	int *sel_sorted = selection_sort(numbers, count, extreme);
 
 
 	if(!sorted || !sel_sorted)
@@ -170,7 +189,8 @@ int main(int argc, char *argv[])
 		numbers[i] = atoi( inputs[i] );
 	}
 
-	test_sorting(numbers, count, sorted_order);
+	test_sorting(numbers, count, sorted_order, find_min_pos);
+	test_sorting(numbers, count, reverse_order, find_max_pos);
 //	test_sorting(numbers, count, reverse_order);
 //	test_sorting(numbers, count, strange_order);
 

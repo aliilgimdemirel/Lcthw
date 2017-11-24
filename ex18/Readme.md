@@ -1,13 +1,8 @@
 # Pointers to Functions
 
 ## What we learn;
-* Structs
-* malloc / free
-* assert
-* strdup (string duplicate)
 
-
-###From the book:
+### From the book:
 * Write it: `type nameOfFunction(parameters)`
 * Wrap it: `type` **`(*`**` nameOfFunction`**)**`(parameters)`
 * Rename it: `type (* `**`funcPTRname`**`)(parameters)`
@@ -15,7 +10,7 @@
 
 ## other findings;
 ### Xcredit 3
-Passing in the wrong function is sort of a disaster bcz the compiler does not given an Error !
+Passing in the wrong function is sort of a disaster because the compiler does not even give an Error!
 
 > `test_sorting(numbers, count, die);`
 
@@ -49,3 +44,7 @@ results as:
 > Program received signal SIGSEGV, Segmentation fault.
 > 
 > 0x0000000000000000 in ?? ()
+
+### Xcredit 5
+
+implemented selection_sort without linked-lists, and with added max/min position selection via a pointer to function. it was entertaining.
