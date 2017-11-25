@@ -1,1 +1,4 @@
 *.vi
+.exrc
+*.cpp
+*.swp
