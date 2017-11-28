@@ -1,6 +1,6 @@
 # The Stack, Scope and Globals
 
-## Handy man_make.sh
+## Handy man\_make.sh
 This particular exercise required manuel compiling of the binaries. So I have put a little shell script for that which;
 > for 0 does `make clean`
 > and 
@@ -87,10 +87,69 @@ void scope_demo(int count)
 ```
 > To repeate the cpp reference again: **the value stored in the object is initialized only once, prior to main function.**
 
-### Xcredit 3
+### Xcredit 2
+> Use pointers to gain access to things you shouldn't have access to.
+I honestly don't have a solid understanding of what this supposed to mean but; we have a **static** variable in ex22.c; **THE\_AGE**
 
-### Xcredit 4
+I tried reach to it, unless I knew what its value should be I wouldn't have. So I dunno, If what I have done is right or wrong.  
+Trying to reach it directy inside ex22\_main.c; `THE_AGE = 9;` 
 
+results as the following ERROR in compile time;
+
+```
+ex22_main.c: In function ‘main’:
+ex22_main.c:59:2: error: ‘THE_AGE’ undeclared (first use in this function)
+  THE_AGE = 9;
+  ^
+ex22_main.c:59:2: note: each undeclared identifier is reported only once for each function it appears in
+
+```
+
+Using the address of an existing global variable I tried to locate THE\_AGE by its value and I guess via code locality it was not that hard. 
+```
+void spy() {                                                                                      
+    int i = 0;                                                                                    
+    int loop = 5;                                                                                 
+    int x = 0;                                                                                    
+    for (i = 0; i < loop*2; i++) {                                                                
+        x = i - loop;                                                                             
+        if (x < 0) {                                                                              
+            printf("*(&(THE_SIZE)-%d) %d\n", abs(x), *(&(THE_SIZE)+x) );                          
+        } else {                                                                                  
+            printf("*(&(THE_SIZE)+%d) %d\n", x, *(&(THE_SIZE)+x) );                               
+        }                                                                                         
+    }                                                                                             
+} 
+```
+Output:
+```
+*(&(THE_SIZE)-5) 4197128
+*(&(THE_SIZE)-4) 0
+*(&(THE_SIZE)-3) 5
+*(&(THE_SIZE)-2) 0
+*(&(THE_SIZE)-1) 86
+*(&(THE_SIZE)+0) 1000
+*(&(THE_SIZE)+1) 37
+*(&(THE_SIZE)+2) 0
+*(&(THE_SIZE)+3) 0
+*(&(THE_SIZE)+4) 1072693248
+```
+At this point I know by the value of 37 the position of it, and I change it to 8 also using the pointer.
+
+`*(&(THE_SIZE)+1) = 8;`
+```
+*(&(THE_SIZE)-5) 4197128
+*(&(THE_SIZE)-4) 0
+*(&(THE_SIZE)-3) 5
+*(&(THE_SIZE)-2) 0
+*(&(THE_SIZE)-1) 86
+*(&(THE_SIZE)+0) 1000
+*(&(THE_SIZE)+1) 8 <<<<
+*(&(THE_SIZE)+2) 0
+*(&(THE_SIZE)+3) 0
+*(&(THE_SIZE)+4) 1072693248
+
+```
 
 ### Xcredit 5
 * For the first edition, [this site](http://www.network-theory.co.uk/docs/gccintro/gccintro_16.html) helped a lot for the Makefile. 
