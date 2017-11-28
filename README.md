@@ -1,2 +1,2 @@
-# Lcthw
-Learns C the Hard way
+# Lcthw / LCTHW
+Learn C the Hard way
