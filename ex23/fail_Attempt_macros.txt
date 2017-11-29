@@ -1,0 +1,50 @@
+#define LAY_DUFF(var) \
+for (j = var; j <= 0; j-=8) { \
+EIGHTS((j/8)-1);    \
+}   \
+
+#define EIGHTS(i)  \
+             *to++ = *from++;   \
+         case ((i*8)+7):            \
+             *to++ = *from++;   \
+         case (i*8)+6:          \
+             *to++ = *from++;   \
+         case (i*8)+5:          \
+             *to++ = *from++;   \
+         case (i*8)+4:          \
+             *to++ = *from++;   \
+         case (i*8)+3:          \
+             *to++ = *from++;   \
+         case (i*8)+2:          \
+             *to++ = *from++;   \
+         case (i*8)+1:          \
+             *to++ = *from++;   \
+
+#define CALC_TIMES(j) \
+switch(j) { \
+    EIGHTS(7);  \
+    case 56:    \
+    EIGHTS(6);  \
+    case 48:    \
+    EIGHTS(5);  \
+    case 40:    \
+    EIGHTS(4);  \
+    case 32:    \
+    EIGHTS(3);  \
+    case 24:    \
+    EIGHTS(2);  \
+    case 16:    \
+    EIGHTS(1);  \
+    case 8:     \
+    EIGHTS(0); }\
+
+
+//void rec_eights(j)
+//{
+//  EIGHTS( (j/8-1) );
+//  
+//  if (j / 8) {
+//      rec_eights(j-8);
+//  }
+//}
+
