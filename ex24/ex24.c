@@ -28,15 +28,36 @@ int main(int argc, char *argv[])
 	char *in = NULL;
 	int rc = 0;	
 
-
 	printf("What is your first name? ");
 	in = fgets(you.first_name, MAX_DATA - 1, stdin);
+	printf("Hello, %s!\n", you.first_name);
 	check(in != NULL, "Failed to read first name.");
+	
+	//rc = fscanf(stdin, "%s", you.first_name);
+	//printf("Hello, %s!\n", you.first_name);
+	
+	//rc = gets(you.first_name); FAILS!
+	//check(rc > 0 , "Could not understand your first_name.");
+	
+	//in = gets(you.first_name);
+	//printf("Hello, %s!\n", you.first_name);
+	//check(in != NULL, "Failed to read first name.");
 
 	printf("What is your last name? ");
 	in = fgets(you.last_name, MAX_DATA - 1, stdin);
+	printf("Hello, %s!\n", you.last_name);
 	check(in != NULL, "Failed to read last name.");
+	
+	//rc = fscanf(stdin, "%10s", you.last_name);
+	//printf("Hello, %s!\n", you.last_name);
+	
+	//rc = gets(you.last_name);
+	//check(rc > 0 , "Could not understand your last_name.");
 
+	//in = gets(you.last_name);
+	//printf("Hello, %s!\n", you.last_name);
+	//check(in != NULL, "Failed to read first name.");
+	
 	printf("How old are you? ");
 	rc = fscanf(stdin, "%d", &you.age);
 	check(rc > 0 , "You have to enter a number.");
@@ -49,11 +70,11 @@ int main(int argc, char *argv[])
 
 	int eyes = -1;
 	rc = fscanf(stdin, "%d", &eyes);
-	check(rc > 0, "You have to enter a number");
+	//check(rc > 0, "You have to enter a number");
 
 	you.eyes = eyes - 1;
-	check(you.eyes <= OTHER_EYES
-			&& you . eyes >= 0, "Do it right, that's not an option.");
+	//check(you.eyes <= OTHER_EYES
+	//		&& you . eyes >= 0, "Do it right, that's not an option.");
 
 	printf("How much do you make an hour? ");
 	rc = fscanf(stdin, "%f", &you.income);
