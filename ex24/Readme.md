@@ -8,7 +8,10 @@ reads  in  at  most  one  less than size characters from stream and stores them 
 stored into the buffer.  A terminating null byte ('\0') is stored after the last character in the buffer.
 
 ### Xcredit 2
-There is not very much difference. **scanf** assumes stdin as input. 
+There is not very much difference.
+**scanf** assumes stdin as input. 
+(-) Has no concept of BUFFER size.
+(+) Can read with format.
 
 ### Xcredit 3
 > initializing as the following:
@@ -51,6 +54,8 @@ Income: 12.000000
  
 
 
-### Xcredit 5
-
+### Xcredit 4
+# TODO
+After having my Laptop die on me and me repairing it then returning to the process back, I find the function in Xcredit2 > replace_scanf adequate for the task of this Xcredit.
+Maybe in the future I'll touch this but as of now, it is really a minor thing.
 
