@@ -4,6 +4,9 @@
 #include <stdarg.h>
 #include "dbg.h"
 #include <math.h>
+#include <glob.h>
+
+
 
 #define MAX_LINE_LEN 1000
 #define MAX_STR_LEN 1000
@@ -12,6 +15,96 @@ char** split_string(char* str);
 char* readline(char *str, FILE *file);
 int isStrInLine(char* Line, int len_Line, char* str);
 int checkAllStrings(char* Line, int len_Line, char** str, int str_count);
+
+int main (int argc, char *argv[])
+{
+	// take inputs 
+	// identify the string to be found
+	char **srch_str;
+	int str_count;
+	char opt = argv[1][1]; // bad design should have been argv[1][0]
+			char *temp_str = "\0";
+			char *temp_blank = " ";
+	switch (opt) {
+		case 'o': // "or logic"
+			str_count = argc-2;
+			srch_str = malloc(sizeof(char*) * str_count);
+			for (int i = 0; i < str_count; i++) {
+				srch_str[i] = argv[i+2];
+			}
+			break;
+
+		default: // No options provided. DEF MODE; "and logic"
+			str_count = argc-1;
+			srch_str = malloc(sizeof(char*) * str_count);
+			for (int i = 0; i < str_count; i++) {
+				srch_str[i] = malloc(sizeof(char) * 40) ;
+				memset(srch_str[i], 0, 40);
+			}
+			printf("srch_str is: \"%s\"\n", srch_str[0]);
+			strcat(srch_str[0], argv[1]);
+			printf("srch_str is: \"%s\"\n", srch_str[0]);
+			for (int i = 1; i < str_count; i++) {
+				strcat(srch_str[0], temp_blank);
+				printf("srch_str is: \"%s\"\n", srch_str[0]);
+				strcat(srch_str[0], argv[i+1]);
+				printf("srch_str is: \"%s\"\n", srch_str[0]);
+			}
+			str_count = 1; // str_count is 1 bcz of "and logic"
+	}
+
+/*	B4 glob	
+ *		int fileCount = 2;
+ *		char *dirOfLogfiles = "/home/demirel/.logfind/";
+ *		char *fileList[2] = {"file1.txt", "file2.txt"};
+ */
+	
+	glob_t glob_buffer;
+	glob("~/.logfind/*.*", GLOB_TILDE, NULL, &glob_buffer);
+	
+	for (int i = 0; i < ( glob_buffer.gl_pathc); i++ ) {
+		printf("File %d is: %s\n", i,glob_buffer.gl_pathv[i]);
+	}
+
+
+	for (int i = 0; i < ( glob_buffer.gl_pathc); i++ ) {
+	//for (int i = 0; i < fileCount; i++ ) {
+	
+/*		B4 Glob
+ *		char *pathFile = calloc(sizeof(char), 50);
+ *		strcat( pathFile, dirOfLogfiles );
+ *		FILE *logfile = fopen( strcat(pathFile,fileList[i]), "r" );
+ */
+
+
+ 		FILE *logfile = fopen( glob_buffer.gl_pathv[i], "r" );
+
+
+//		printf("DEBUG_LOG_FILE\n");
+
+		char *str_readline = malloc(sizeof(char) * MAX_LINE_LEN);
+//		printf("DEBUG_MALLOC\n");
+
+		int counter = 0;
+		while ( !feof(logfile) && counter < 30 ) {
+//		printf("DEBUG\n");
+			str_readline = readline(str_readline, logfile);
+			if ( checkAllStrings( str_readline, strlen(str_readline), srch_str, str_count ) ) {
+				printf("In file %s, @Line:%d, found : %s\n", glob_buffer.gl_pathv[i], counter, str_readline);
+			}
+//			printf("%s\n", str_readline);
+			memset(str_readline, 0, MAX_LINE_LEN);
+//			printf("DEBUG_MEMSET\n");
+			counter++; // assumes 2^32 Line count;
+		}
+	
+//		printf("File: %s had %d Lines.\n", pathFile, counter);
+		fclose(logfile);
+	}
+	
+//	globfree(glob_buffer);
+	return 0;	
+}
 
 
 int isStrInLine(char* Line, int len_Line, char* str)
@@ -36,78 +129,6 @@ int checkAllStrings(char* Line, int len_Line, char** str, int str_count)
 	}
 	return ret_val;
 }
-
-int main (int argc, char *argv[])
-{
-	// take inputs 
-	// identify the string to be found
-	char **srch_str;
-	int str_count;
-	char opt = argv[1][1]; // bad design should have been argv[1][0]
-			char *temp_str = "\0";
-			char *temp_blank = " ";
-	switch (opt) {
-		case 'o':
-			str_count = argc-2;
-			srch_str = malloc(sizeof(char*) * str_count);
-			for (int i = 0; i < str_count; i++) {
-				srch_str[i] = argv[i+2];
-			}
-			break;
-
-		default: // No options provided. DEF MODE; &&
-			str_count = argc-1;
-			srch_str = malloc(sizeof(char*) * str_count);
-			for (int i = 0; i < str_count; i++) {
-				srch_str[i] = malloc(sizeof(char) * 40) ;
-				memset(srch_str[i], 0, 40);
-			}
-			printf("srch_str is: \"%s\"\n", srch_str[0]);
-			strcat(srch_str[0], argv[1]);
-			printf("srch_str is: \"%s\"\n", srch_str[0]);
-			for (int i = 1; i < str_count; i++) {
-				strcat(srch_str[0], temp_blank);
-				printf("srch_str is: \"%s\"\n", srch_str[0]);
-				strcat(srch_str[0], argv[i+1]);
-				printf("srch_str is: \"%s\"\n", srch_str[0]);
-			}
-			str_count = 1;
-	}
-
-
-	int fileCount = 2;
-	char *dirOfLogfiles = "/home/demirel/.logfind/";
-	char *fileList[2] = {"file1.txt", "file2.txt"};
-
-	for (int i = 0; i < fileCount; i++ ) {
-		char *pathFile = calloc(sizeof(char), 50);
-		strcat( pathFile, dirOfLogfiles );
-
-		FILE *logfile = fopen( strcat(pathFile,fileList[i]), "r" );
-//		printf("DEBUG_LOG_FILE\n");
-
-		char *str_readline = malloc(sizeof(char) * MAX_LINE_LEN);
-//		printf("DEBUG_MALLOC\n");
-
-		int counter = 0;
-		while ( !feof(logfile) && counter < 30 ) {
-//		printf("DEBUG\n");
-			str_readline = readline(str_readline, logfile);
-			if ( checkAllStrings( str_readline, strlen(str_readline), srch_str, str_count ) ) {
-				printf("In file %s, @Line:%d, found : %s\n", pathFile, counter, str_readline);
-			}
-//			printf("%s\n", str_readline);
-			memset(str_readline, 0, MAX_LINE_LEN);
-//			printf("DEBUG_MEMSET\n");
-			counter++; // assumes 2^32 Line count;
-		}
-	
-//		printf("File: %s had %d Lines.\n", pathFile, counter);
-		fclose(logfile);
-	}
-	return 0;	
-}
-
 
 char *readline(char *str, FILE *file)
 {
