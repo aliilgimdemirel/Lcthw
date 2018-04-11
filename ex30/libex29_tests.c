@@ -1,8 +1,20 @@
-#include <stdio.h>
-#include "dbg.h"
+#include "minunit.h"
 #include <dlfcn.h>
 
 typedef int (*lib_function) (const char *data);
+char *lib_file = "build/libex29.so";
+void *lib = NULL;
+
+
+
+
+
+
+
+
+
+
+
 
 int main(int argc, char *argv[])
 {

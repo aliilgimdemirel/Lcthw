@@ -28,7 +28,6 @@ $(TARGET): build $(OBJECTS)
 	ranlib $@
 
 $(SO_TARGET): $(TARGET) $(OBJECTS)
-	@echo Helloeeees.
 	$(CC) -shared -o $@ $(OBJECTS)
 	@echo Helloeeees.
 
@@ -43,7 +42,7 @@ build:
 # The Unit Tests
 #.PHONY: $(TESTS)
 tests: $(TESTS)
-	sh ./tests/test_lib.sh
+	sh ./tests/runtests.sh #test_lib.sh
 #tests: CFLAGS += $(SO_TARGET)
 #tests: $(TESTS)
 #	cat $^ > $@
