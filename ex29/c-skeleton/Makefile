@@ -17,7 +17,7 @@ TARGET=build/libex29.a
 SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 
 # The Target Build
-all : $(TARGET) $(SO_TARGET) $(TESTS) #tests
+all : $(TARGET) $(SO_TARGET) $(TESTS) tests
 
 dev: CFLAGS=-g -Wall -Isrc -Wall -Wextra $(OPTFLAGS)
 dev: all
@@ -36,19 +36,23 @@ build:
 	@mkdir -p build
 	@mkdir -p bin
 
+# I do not even know how to name this, **the rest** ???
+%: %.c 
+	${CC} ${CFLAGS} $(SO_TARGET) $^ -ldl -o $@
+
 # The Unit Tests
 #.PHONY: $(TESTS)
+tests: $(TESTS)
+	sh ./tests/test_lib.sh
 #tests: CFLAGS += $(SO_TARGET)
 #tests: $(TESTS)
 #	cat $^ > $@
 #	$(CC) $(CFLAGS) $(TEST_SRC) -ldl -o $(TESTS)
 #	$(CC) $(CFLAGS) $(TEST_SRC output,,$<) -o -ldl $<
-#	sh ./tests/runtests.sh
-
  
-$(TESTS): % : $(TEST_SRC)
-	$(CC) $(CFLAGS) $(SO_TARGET) $< -ldl -o $@
-
+# Had problems as It only 
+#$(TESTS): % : $(TEST_SRC)
+#	$(CC) $(CFLAGS) $(SO_TARGET) $< -ldl -o $@
 
 
 # The Cleaner
