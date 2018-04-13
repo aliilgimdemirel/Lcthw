@@ -1,5 +1,6 @@
 #include "lcthw/dbg.h"
 #include "lcthw/list.h"
+#include "stdio.h"
 
 List *List_create()
 {
@@ -21,14 +22,68 @@ void List_destroy(List * list)
 void List_clear(List * list)
 {
 	LIST_FOREACH(list, first, next, cur) {
-		free(cur->value);
+		//printf("cur value is: %s\n", cur->value);
+		cur->value = NULL;
+		//printf("cur value is: %s\n", cur->value);
 	}
 }
 
 void List_clear_destroy(List * list)
 {
 	List_clear(list);
-	List_destroy(list);
+//	List_destroy(list);
+/*
+	LIST_FOREACH(list, first, next, cur) {
+		printf("DEBUG1\n");
+		free(cur->value);
+		printf("DEBUG2\n");
+		if (cur->prev) {
+			free(cur->prev);
+		}
+	}
+
+	free(list->last);
+		printf("DEBUG3\n");
+	free(list);
+		printf("DEBUG4\n");
+*/
+}
+
+void List_insert_at_nth(List * list, int n, void *value)
+{
+	ListNode *cur = list->first;
+	ListNode *node = calloc(1,sizeof(ListNode));
+	check_mem(node);
+
+	for (int i = 0; i < n; i++) {
+		cur = cur->next;	
+	}
+
+	node->value = value;
+	node->prev = cur->prev;
+	node->next = cur;
+	cur->prev->next = node;
+	cur->prev = node;
+
+	list->count++;
+
+
+error:
+	return ;
+}
+
+void *List_get_nth(List * list, int n)
+{
+	ListNode *node = list->first;
+
+	for (int i = 0; i < n; i ++) {
+		node = node->next;	
+	}
+
+	return node->value;
+
+error:
+	return NULL;
 }
 
 void List_push(List * list, void *value)

@@ -18,6 +18,94 @@ char *test_create()
 char *test_destroy()
 {
 	List_clear_destroy(list);
+	//mu_assert(List_count(list) == 0, "Wrong count after destroy.");
+
+	return NULL;
+}
+
+char *test_get_nth()
+{
+	List_push(list, test1);
+	mu_assert(List_last(list) == test1, "Wrong last value.");
+	
+	List_push(list, test2);
+	mu_assert(List_last(list) == test2, "Wrong last value.");
+	
+	List_push(list, test3);
+	mu_assert(List_last(list) == test3, "Wrong last value.");
+	mu_assert(List_count(list) == 3, "Wrong count on push.");
+
+	char *value;
+	value = List_get_nth(list, 0);
+	mu_assert(value == test1, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	value = List_get_nth(list, 1);
+	mu_assert(value == test2, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	value = List_get_nth(list, 2);
+	mu_assert(value == test3, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	char *val = List_pop(list);
+	mu_assert(val == test3, "Wrong value on pop.");
+	
+	val = List_pop(list);
+	mu_assert(val == test2, "Wrong value on pop.");
+
+	val = List_pop(list);
+	mu_assert(val == test1, "Wrong value on pop.");
+
+	mu_assert(List_count(list) == 0, "Wrong count after pop.");
+	return NULL;
+}
+
+char *test_insert_at_nth()
+{
+	List_push(list, test1);
+	mu_assert(List_last(list) == test1, "Wrong last value.");
+	
+	List_push(list, test2);
+	mu_assert(List_last(list) == test2, "Wrong last value.");
+	
+	List_push(list, test3);
+	mu_assert(List_last(list) == test3, "Wrong last value.");
+	mu_assert(List_count(list) == 3, "Wrong count on push.");
+
+	char *value;
+	value = List_get_nth(list, 0);
+	mu_assert(value == test1, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	List_insert_at_nth(list, 1, value);
+	mu_assert(value == test1, "Wrong get_nth value.");
+
+	value = List_get_nth(list, 1);
+	mu_assert(value == test1, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	value = List_get_nth(list, 2);
+	mu_assert(value == test2, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	value = List_get_nth(list, 3);
+	mu_assert(value == test3, "Wrong get_nth value.");
+	//printf("value returned is: %s\n", value);
+
+	char *val = List_pop(list);
+	mu_assert(val == test3, "Wrong value on pop.");
+	
+	val = List_pop(list);
+	mu_assert(val == test2, "Wrong value on pop.");
+
+	val = List_pop(list);
+	mu_assert(val == test1, "Wrong value on pop.");
+
+	val = List_pop(list);
+	mu_assert(val == test1, "Wrong value on pop.");
+
+	mu_assert(List_count(list) == 0, "Wrong count after pop.");
 
 	return NULL;
 }
@@ -101,9 +189,14 @@ char *all_tests()
 
 	mu_run_test(test_create);
 	mu_run_test(test_push_pop);
+	
 	mu_run_test(test_unshift);
 	mu_run_test(test_remove);
 	mu_run_test(test_shift);
+
+	mu_run_test(test_get_nth);
+	mu_run_test(test_insert_at_nth);
+
 	mu_run_test(test_destroy);
 
 	return NULL;
