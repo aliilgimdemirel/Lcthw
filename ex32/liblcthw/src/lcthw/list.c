@@ -28,6 +28,20 @@ void List_clear(List * list)
 	}
 }
 
+List *Merge_two_lists(List* list1, List *list2)
+{
+	List *merged_list =  calloc(1, sizeof(List));
+
+	list1->last->next = list2->first;
+	list2->first->prev = list1->last;
+
+	merged_list = list1;
+	merged_list->last = list2->last;
+	merged_list->count = list1->count + list2->count;
+	
+	return merged_list;
+}
+
 void List_clear_destroy(List * list)
 {
 	List_clear(list);

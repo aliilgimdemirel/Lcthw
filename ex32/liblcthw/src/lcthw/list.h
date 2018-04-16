@@ -19,6 +19,7 @@ typedef struct List {
 } List;
 
 List *List_create();
+List *Merge_two_lists(List* list1, List *list2);
 void List_destroy(List * list);
 void List_clear(List * list);
 void List_clear_destroy(List * list);
