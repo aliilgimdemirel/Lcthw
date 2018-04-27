@@ -28,8 +28,9 @@ void List_clear(List * list)
 	}
 }
 
+// TODO
 List *Merge_two_lists(List* list1, List *list2)
-{
+{ 
 	List *merged_list =  calloc(1, sizeof(List));
 
 	list1->last->next = list2->first;
