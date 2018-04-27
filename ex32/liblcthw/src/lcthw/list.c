@@ -28,17 +28,19 @@ void List_clear(List * list)
 	}
 }
 
-// TODO
+// Given 2 lists, merges them into 1 and returns it.
 List *Merge_two_lists(List* list1, List *list2)
 { 
-	List *merged_list =  calloc(1, sizeof(List));
 
-	list1->last->next = list2->first;
-	list2->first->prev = list1->last;
+	List *merged_list =  malloc(sizeof(List));
 
-	merged_list = list1;
-	merged_list->last = list2->last;
-	merged_list->count = list1->count + list2->count;
+	for (int i = 0; i < list1->count; i++) {
+		List_push ( merged_list, List_get_nth(list1, i) );
+	}
+
+	for (int i = 0; i < list2->count; i++) {
+		List_push ( merged_list, List_get_nth(list2, i) );
+	}
 	
 	return merged_list;
 }
@@ -185,9 +187,6 @@ void *List_remove(List * list, ListNode * node)
 		ListNode *before = node->prev;
 		after->prev = before;
 		before->next =after;
-		//Try ! TODO
-		//node->next->prev = node->prev;
-		//node->prev->next = node->next;
 	}
 	
 	list->count--;

@@ -115,7 +115,7 @@ char *test_insert_at_nth()
 
 char *test_merge_two_Lists()
 {
-	// Create 2 Lists	
+	// Create 3 Lists, 2 to be merged into the 3rd.	
 	list1 = List_create();
 	mu_assert(list1 != NULL, "Failed to create list.");
 	list2 = List_create();
@@ -137,10 +137,8 @@ char *test_merge_two_Lists()
 
 	// Merge The Lists.
 	list3 =	Merge_two_lists(list1, list2);
-	printf("count of List3 is: %d\n",List_count(list3));	
-	free(list2);
 
-
+	// Check entries.
 	char *value = List_get_nth(list3, 0);
 	mu_assert(value == test1, "Wrong get_nth value.");
 	
@@ -153,11 +151,10 @@ char *test_merge_two_Lists()
 	value = List_get_nth(list3, 3);
 	mu_assert(value == test2, "Wrong get_nth value.");
 
-	printf("count of List3 is: %d\n",List_count(list3));	
-	printf("count of List1 is: %d\n",List_count(list1));	
+	// Check List count
 	mu_assert(List_count(list3) == 4, "Wrong count on push.");
-	free(list1);
 
+	// Check values with popping	
 	char *val = List_pop(list3);
 	mu_assert(val == test2, "Wrong value on pop.");
 	val = List_pop(list3);
@@ -167,8 +164,8 @@ char *test_merge_two_Lists()
 	val = List_pop(list3);
 	mu_assert(val == test1, "Wrong value on pop.");
 
-	//val = List_get_nth(list1,0);	
-	//mu_assert(val == test1, "Wrong value on pop.");
+	val = List_get_nth(list1,0);	
+	mu_assert(val == test1, "Wrong value on pop.");
 
 	mu_assert(List_count(list3) == 0, "Wrong count on pop.");
 
