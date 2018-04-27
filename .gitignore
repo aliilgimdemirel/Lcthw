@@ -1,5 +1,9 @@
+*.o
+*.a
+*.so
 *.vi
 .exrc
 *.cpp
 *.swp
 *.swo
+*.log
