@@ -25,8 +25,14 @@ In vim documentation CTRL is refered as ^, so will.
 <tr><td>^w _ </td><td>         - maximize current window vertically</td></tr>
 <tr><td>^w | </td><td>         - maximize current window horizontally</td></tr>
 <tr><td>^w = </td><td>         - make all equal size</td></tr>
+<tr><td>^w H </td><td>	       - resize cur Window to take all of the Left side</td></tr>
+<tr><td>^w J </td><td>         - resize cur Window to take all of the Top side</td></tr>
+<tr><td>^w K </td><td>         - resize cur Window to take all of the Bottom side</td></tr>
+<tr><td>^w L </td><td>         - resize cur Window to take all of the Right side</td></tr>
+<tr><td>^w ^7 </td><td>         - maximize cur Window in its current pane vertically</td></tr>
 <tr><td>:sview file </td><td>      - same as split, but readonly</td></tr>
 <tr><td>:close </td><td>           - close current window</td></tr>
+<tr><td>TODO ADD tabs !! </td><td>           - TAAABS TODO </td></tr>
 <tr><td>^W [N] - </td><td>  Decrease current window height by N (default 1)</td></tr>
 <tr><td>^W [N] + </td><td>  Increase current window height by N (default 1)</td></tr>
 <tr><td>^W [N] < </td><td>  Decrease current window width by N (default 1)</td></tr>
