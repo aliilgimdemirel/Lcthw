@@ -113,9 +113,10 @@ char *test_insert_at_nth()
 	return NULL;
 }
 
-char *test_merge_two_Lists()
+// A self standing test where you create 3 lists, and at the end you free them
+char *test_join_two_Lists()
 {
-	// Create 3 Lists, 2 to be merged into the 3rd.	
+	// Create 3 Lists, 2 to be joind into the 3rd.	
 	list1 = List_create();
 	mu_assert(list1 != NULL, "Failed to create list.");
 	list2 = List_create();
@@ -135,8 +136,8 @@ char *test_merge_two_Lists()
 	List_push(list2, test2);
 	mu_assert(List_last(list2) == test2, "Wrong last value.");
 
-	// Merge The Lists.
-	list3 =	Merge_two_lists(list1, list2);
+	// Join The Lists.
+	list3 =	Join_two_lists(list1, list2);
 
 	// Check entries.
 	char *value = List_get_nth(list3, 0);
@@ -168,6 +169,57 @@ char *test_merge_two_Lists()
 	mu_assert(val == test1, "Wrong value on pop.");
 
 	mu_assert(List_count(list3) == 0, "Wrong count on pop.");
+	
+	List_destroy(list1);
+	List_destroy(list2);
+	List_destroy(list3);
+
+	return NULL;
+}
+
+// A self standing test where you create 3 lists, and at the end you free them
+char *test_split_into_two_Lists()
+{
+	// Create 3 Lists, 1 to be split into the 2.	
+	list1 = List_create();
+	mu_assert(list1 != NULL, "Failed to create list.");
+	list2 = List_create();
+	mu_assert(list2 != NULL, "Failed to create list.");
+	list3 = List_create();
+	mu_assert(list3 != NULL, "Failed to create list.");
+	
+	// Populate 1st List
+	List_push(list1, test1);
+	mu_assert(List_last(list1) == test1, "Wrong last value.");
+	List_push(list1, test1);
+	mu_assert(List_last(list1) == test1, "Wrong last value.");
+	List_push(list1, test2);
+	mu_assert(List_last(list1) == test2, "Wrong last value.");
+	List_push(list1, test2);
+	mu_assert(List_last(list1) == test2, "Wrong last value.");
+	List_push(list1, test3);
+	mu_assert(List_last(list1) == test3, "Wrong last value.");
+	List_push(list1, test3);
+	mu_assert(List_last(list1) == test3, "Wrong last value.");
+
+	// Split The List.
+	int split_Pos = 2;
+	Split_list_into_2_Lists_At_Position(list1, list2, list3, split_Pos);
+
+	// Check entries.
+	char *value = List_get_nth(list1, 2);
+	char *value2 = List_get_nth(list3, 0);
+	mu_assert(value == value2, "Wrong split_position.");
+	
+	// Check List count
+	printf("count of list 2 is: %d\n", List_count(list2));
+	printf("count of list 3 is: %d\n", List_count(list3));
+	mu_assert(List_count(list2) == 2, "Wrong count on push.");
+
+	// Clean after self	
+	List_destroy(list1);
+	List_destroy(list2);
+	List_destroy(list3);
 
 	return NULL;
 }
@@ -261,7 +313,9 @@ char *all_tests()
 	mu_run_test(test_get_nth);
 	mu_run_test(test_insert_at_nth);
 
-	mu_run_test(test_merge_two_Lists);
+	mu_run_test(test_join_two_Lists);
+	
+	mu_run_test(test_split_into_two_Lists);
 
 	mu_run_test(test_destroy);
 
