@@ -28,21 +28,36 @@ void List_clear(List * list)
 	}
 }
 
-// Given 2 lists, merges them into 1 and returns it.
-List *Merge_two_lists(List* list1, List *list2)
+// Splits the first List into the next 2 lists, until and excluding position split_index.
+void Split_list_into_2_Lists_At_Position(List* list1, List *list2, List *list3, int split_index)
+{
+	for (int i = 0; i < split_index; i++)
+	{
+		List_push ( list2, List_get_nth(list1, i) );
+	}
+
+	for (int i = split_index; i < list1->count; i++)
+	{
+		List_push ( list3, List_get_nth(list1, i) );
+	}
+
+}
+
+// Given 2 lists, joins them into 1 and returns it.
+List *Join_two_lists(List* list1, List *list2)
 { 
 
-	List *merged_list =  malloc(sizeof(List));
+	List *joined_list =  malloc(sizeof(List));
 
 	for (int i = 0; i < list1->count; i++) {
-		List_push ( merged_list, List_get_nth(list1, i) );
+		List_push ( joined_list, List_get_nth(list1, i) );
 	}
 
 	for (int i = 0; i < list2->count; i++) {
-		List_push ( merged_list, List_get_nth(list2, i) );
+		List_push ( joined_list, List_get_nth(list2, i) );
 	}
 	
-	return merged_list;
+	return joined_list;
 }
 
 void List_clear_destroy(List * list)
