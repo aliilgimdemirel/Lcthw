@@ -212,8 +212,6 @@ char *test_split_into_two_Lists()
 	mu_assert(value == value2, "Wrong split_position.");
 	
 	// Check List count
-	printf("count of list 2 is: %d\n", List_count(list2));
-	printf("count of list 3 is: %d\n", List_count(list3));
 	mu_assert(List_count(list2) == 2, "Wrong count on push.");
 
 	// Clean after self	
@@ -270,12 +268,6 @@ char *test_unshift()
 
 char *test_remove()
 {
-	// I find this stupid IMHO, maybe I change remove only and want to test remove only.
-	// Why create such dependencies ?
-	//
-	// we only nee to test the moddle remove case sinse push/shift
-	// already tests the other cases
-
 	char *val = List_remove(list, list->first->next);
 	mu_assert(val == test2, "Wrong removed element.");
 	mu_assert(List_count(list) == 2, "Wrong count after remove.");
