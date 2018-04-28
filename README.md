@@ -33,6 +33,7 @@ In vim documentation CTRL is refered as ^, so will.
 <tr><td>:sview file </td><td>      - same as split, but readonly</td></tr>
 <tr><td>:close </td><td>           - close current window</td></tr>
 <tr><td>TODO ADD tabs !! </td><td>           - TAAABS TODO </td></tr>
+<tr><td>:tabdo {cmd} </td><td>           - does the **cmd** for all windows inside the current tab (e.g., s/join/merge/ge. e here is for ignoring errors if join is not found in a file perse.) </td></tr>
 <tr><td>^W [N] - </td><td>  Decrease current window height by N (default 1)</td></tr>
 <tr><td>^W [N] + </td><td>  Increase current window height by N (default 1)</td></tr>
 <tr><td>^W [N] < </td><td>  Decrease current window width by N (default 1)</td></tr>
