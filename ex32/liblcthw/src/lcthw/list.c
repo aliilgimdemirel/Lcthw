@@ -1,6 +1,6 @@
 #include "lcthw/dbg.h"
 #include "lcthw/list.h"
-#include "stdio.h"
+#include <stdio.h>
 #include <assert.h>
 
 List *List_create()
