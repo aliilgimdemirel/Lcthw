@@ -8,7 +8,7 @@ char *values[] = { "XXXX", "1234", "abcd", "xjvef", "NDSS", };
 
 #define NUM_VALUES 5
 
-List *create_words*()
+List *create_words()
 {
 	int i = 0;
 	List *words = List_create();
@@ -19,7 +19,7 @@ List *create_words*()
 
 	return words;
 }
-
+/*
 int is_sorted(List * words)
 {
 	LIST_FOREACH(words, first, next, cur) {
@@ -84,11 +84,48 @@ char* test_merge_sort()
 	return NULL;
 }
 
+char* test_node_cmp()
+{
+	ListNode *node1 = calloc(1, sizeof(ListNode));
+	ListNode *node2 = calloc(1, sizeof(ListNode));
+
+	node1->value = 1;
+	node2->value = 3;
+
+	
+	return NULL;
+}
+*/
+
+char* test_node_swp()
+{
+	printf("DEBUG SWP\n");	
+
+	List *words = create_words();
+
+	printf("list->first is: %s\n", words->first->value);	
+		
+	List_node_swp(words->first, words->last);
+
+	printf("list->first is: %s\n", words->first->value);	
+
+	mu_assert(!strcmp(words->first->value, values[4]), "Node swap failed.")
+
+
+
+	return NULL;
+}
+
+
 char* all_tests()
 {
 	mu_suite_start();
-	mu_run_test(test_bubble_sort);
-	mu_run_test(test_merge_sort);
+
+	mu_run_test(test_node_swp);
+	//mu_run_test(test_node_cmp);
+
+	//mu_run_test(test_bubble_sort);
+	//mu_run_test(test_merge_sort);
 
 	return NULL;
 }
