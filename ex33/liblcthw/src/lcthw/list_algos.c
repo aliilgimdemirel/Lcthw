@@ -4,6 +4,7 @@
 
 
 #include "lcthw/list_algos.h"
+#include <string.h>
 
 
 
@@ -11,11 +12,15 @@
 
 
 
-
-int List_node_cmp(ListNode* node1, ListNode* node2)
+int List_node_cmp(ListNode* node1, ListNode* node2, List_compare cmp)
 {
-
-	return 0;
+	// assumes cmp returns 0 for success.
+	if ( !cmp(node1->value, node2->value) ) {
+		return 0;
+	}
+	else {
+		return 1;
+	}
 }
 
 

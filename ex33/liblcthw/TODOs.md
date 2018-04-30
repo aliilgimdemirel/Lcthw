@@ -6,6 +6,8 @@
 # TODOs
 - [x] write test for list node cmp
 - [x] write test for list node swp
-- [ ] implement list node cmp
+- [x] implement list node cmp
 - [x] implement list node swp
+- [ ] implement bubble sort
+- [ ] implement merge sort
 

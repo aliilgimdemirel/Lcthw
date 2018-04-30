@@ -84,18 +84,26 @@ char* test_merge_sort()
 	return NULL;
 }
 
+*/
+
 char* test_node_cmp()
 {
 	ListNode *node1 = calloc(1, sizeof(ListNode));
 	ListNode *node2 = calloc(1, sizeof(ListNode));
 
-	node1->value = 1;
-	node2->value = 3;
+	node1->value = values[2];
+	node2->value = values[2];
+
+	int rc = List_node_cmp(node1, node2, (List_compare) strcmp);
+
+	mu_assert(rc == 0, "Compare failed.");
+	
+	free(node1);
+	free(node2);
 
 	
 	return NULL;
 }
-*/
 
 char* test_node_swp()
 {
@@ -103,11 +111,11 @@ char* test_node_swp()
 
 	List *words = create_words();
 
-	printf("list->first is: %s\n", words->first->value);	
+	printf("list->first is: %s\n", (char*)words->first->value);	
 		
 	List_node_swp(words->first, words->last);
 
-	printf("list->first is: %s\n", words->first->value);	
+	printf("list->first is: %s\n", (char*)words->first->value);	
 
 	mu_assert(!strcmp(words->first->value, values[4]), "Node swap failed.")
 
@@ -122,7 +130,7 @@ char* all_tests()
 	mu_suite_start();
 
 	mu_run_test(test_node_swp);
-	//mu_run_test(test_node_cmp);
+	mu_run_test(test_node_cmp);
 
 	//mu_run_test(test_bubble_sort);
 	//mu_run_test(test_merge_sort);

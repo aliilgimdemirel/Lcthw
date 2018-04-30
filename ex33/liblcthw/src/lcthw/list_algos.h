@@ -6,12 +6,17 @@
 typedef int (*List_compare)(char* a, char* b);
 
 
+/*
+ * 
+ */
+
+
 
 /*
  * A method for comparing the nodes. Will return 0 if first one is bigger,
  * else it will return 1. (Thus will not swp for equal nodes.)
  */
-int List_node_cmp(ListNode* node1, ListNode* node2);
+int List_node_cmp(ListNode* node1, ListNode* node2, List_compare cmp);
 
 
 /*
