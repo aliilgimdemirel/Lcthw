@@ -30,56 +30,51 @@ int List_node_cmp(ListNode* node1, ListNode* node2, List_compare cmp)
 
 void List_node_swp(ListNode* node1, ListNode* node2)
 {
-	ListNode temp;
+	ListNode* temp;
 
-	temp.value = node1->value;
-	temp.next = node1->next;
-	temp.prev = node1->prev;
+	temp->value = node1->value;
 
 	node1->value = node2->value;
-	node1->next = node2->next;	
-	node1->prev = node2->prev;	
 
-	node2->value = temp.value;
-	node2->next = temp.next;
-	node2->prev = temp.prev;
-
+	node2->value = temp->value;
 }
 
-// TODO loop correction for last element
 int List_bubble_sort(List* list, List_compare cmp)
 {
 
-	check(list != NULL, "Non existent list");
+	//check(list != NULL, "Non existent list");
 	
 	// empty list will return 0.
 	if (list->count == 0) { return 0; }
 
 	// early abort for already sorted lists.
-	if (!is_sorted(list, cmp)) { return 0;}
+	if (!is_sorted(list, (List_compare) cmp)) { return 0;}
 
 	int loopCount = list->count;
+	int innerLoopCount = loopCount;
 
 	for (int i = 0; i < loopCount; i++) {
-
-	ListNode* cur = list->first;
-	ListNode* next = cur->next;
-
-		for (int i = 0; i < loopCount; i++) {
-			
+		dump_list(list);
+		ListNode* cur = list->first;
+		ListNode* next = cur->next;
+	
+		innerLoopCount = innerLoopCount-1;		
+		for (int j = 0; j < innerLoopCount; j++) {
 			int rc = List_node_cmp(cur, next, (List_compare) cmp);
 			if ( rc > 0 ) {
+				printf("SWAP\n");
 				List_node_swp(cur, next);
-				// as node_swp changes cur's pos, we do not need to handle its next pos.
-				next = cur->next;
-			} else { 
-				cur = cur->next;
-				next = next->next;
+			} else {
+				printf("NO SWAP\n");
 			}
-		}
-	
-	}
 
+			if (next != list->last) {
+				next = next->next;
+				cur = cur->next;
+			}
+	
+		}
+	}
 	return 0;
 
 error:
@@ -89,16 +84,18 @@ error:
 int is_sorted(List* list, List_compare cmp)
 {
 	ListNode* cur = list->first;
+	if (cur == NULL) {
+		return 0;
+	}
+
 	ListNode* next = cur->next;
 
-	for (int i = 0; i < list->count; i++) {
+	for (int i = 0; i < list->count-1; i++) {
 
 		int rc = List_node_cmp(cur, next, (List_compare) cmp);
-		if ( rc <= 0  ) {
-			;
-		} else {
+		if ( rc > 0  ) {
 			return 1;
-		}	
+		}
 		
 		if (next != list->last) {
 			next = next->next;
@@ -109,4 +106,16 @@ int is_sorted(List* list, List_compare cmp)
 	return 0;
 }
 
+static void dump_list(List* list)
+{
+	LIST_FOREACH(list, first, next, cur) {
+		printf("%s--->",cur->value);
+	}
+	printf("\n");
+}
 
+void dump_node(ListNode* node, char* nodeName)
+{
+	printf("%s's\n val is : %s\n next is:%p\n prev is:%p\n", nodeName,
+			node->value, node->next, node->prev);
+}

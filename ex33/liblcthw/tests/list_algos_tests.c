@@ -45,60 +45,12 @@ int is_sorted(List * words)
 	
 	return 1;
 }
-
-
-char* test_bubble_sort()
-{
-	List *words = create_unsorted_words();
-
-	//should work on a list that needs sorting
-	int rc = List_bubble_sort(words, (List_compare) strcmp);
-	mu_assert(rc == 0, "Bubble sort failed.");
-	mu_assert(is_sorted(words), 
-		"Words are not sorted after buble sort.");
-
-	//should work on an already sorted list
-	rc = List_bubble_sort(words, (List_compare) strcmp);
-	mu_assert(rc == 0, "Bubble sort of alreader sorted failed.");
-	mu_assert(is_sorted(words), 
-		"Words should be sorted if already bubble sorted.");
-
-	List_destroy(words);
-	
-	//should work on an empty list
-	words = List_create(words);
-	rc = List_bubble_sort(words, (List_compare) strcmp);
-	mu_assert(rc == 0, "Bubble sort failed on empty list.");
-	mu_assert(is_sorted(words), 
-		"Words should be sorted if empty.");
-
-	List_destroy(words);
-
-}
-
-
-
-char* test_merge_sort()
-{
-	List *words = create_unsorted_words();
-
-	// should work on a list that needs sorting
-	List *res1 = List_merge_sort(words, (List_compare) strcmp);
-	mu_assert(is_sorted(res1), "Words are not sorted after merge sort.");
-
-	List *res2 = List_merge_sort (res, (List_compare) strcmp);
-	mu_assert(is_sorted(res2), 
-		"Should still be sorted after merge sort.");
-
-	List_destroy(res1);
-	List_destroy(res2);
-
-	List_destroy(words);
-
-	return NULL;
-}
-
 */
+
+
+
+
+
 
 char* test_node_cmp()
 {
@@ -153,6 +105,55 @@ char *test_is_sorted()
 	return NULL;
 }
 
+char* test_bubble_sort()
+{
+	List *words = create_unsorted_words();
+
+	//should work on a list that needs sorting
+	int rc = List_bubble_sort(words, (List_compare) strcmp);
+	mu_assert(rc == 0, "Bubble sort failed.");
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words are not sorted after bubble sort.");
+
+	//should work on an already sorted list
+	rc = List_bubble_sort(words, (List_compare) strcmp);
+	mu_assert(rc == 0, "Bubble sort of alreader sorted failed.");
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if already bubble sorted.");
+
+	List_destroy(words);
+	
+	//should work on an empty list
+	words = List_create(words);
+	rc = List_bubble_sort(words, (List_compare) strcmp);
+	mu_assert(rc == 0, "Bubble sort failed on empty list.");
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if empty.");
+
+	List_destroy(words);
+
+	return NULL;
+}
+
+char* test_merge_sort()
+{
+	List *words = create_unsorted_words();
+
+	// should work on a list that needs sorting
+	List *res1 = List_merge_sort(words, (List_compare) strcmp);
+	mu_assert(is_sorted(res1, (List_compare) strcmp) == 0), "Words are not sorted after merge sort.");
+
+	List *res2 = List_merge_sort (res, (List_compare) strcmp);
+	mu_assert(is_sorted(res2, (List_compare) strcmp) == 0), 
+		"Should still be sorted after merge sort.");
+
+	List_destroy(res1);
+	List_destroy(res2);
+
+	List_destroy(words);
+
+	return NULL;
+}
 
 char* all_tests()
 {
@@ -163,7 +164,8 @@ char* all_tests()
 
 	mu_run_test(test_is_sorted);
 
-	//mu_run_test(test_bubble_sort);
+	mu_run_test(test_bubble_sort);
+
 	//mu_run_test(test_merge_sort);
 
 	return NULL;

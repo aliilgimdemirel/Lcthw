@@ -36,5 +36,7 @@ void List_node_swp(ListNode* node1, ListNode* node2);
 int is_sorted(List* list, List_compare cmp);
 
 
-int List_bubble_sort(List* words, List_compare cmp);
+int List_bubble_sort(List* list, List_compare cmp);
+	
+static void dump_list(List* list);
 #endif
