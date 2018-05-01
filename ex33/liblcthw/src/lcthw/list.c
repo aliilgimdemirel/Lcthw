@@ -132,7 +132,7 @@ void *List_remove(List * list, ListNode * node)
 	// Removes first Node in the List
 	} else if (node == list->first) {
 		list->first = node->next;
-		check(list->first !=NULL,
+		check(list->first != NULL,
 				"Invalid list, somehow got a first that is NULL.");
 		list->first->prev = NULL;
 	// Removes last Node in the List
@@ -152,6 +152,8 @@ void *List_remove(List * list, ListNode * node)
 	list->count--;
 	result = node->value;
 	free(node);
+
+	return result;
 
 error:
 	return result;

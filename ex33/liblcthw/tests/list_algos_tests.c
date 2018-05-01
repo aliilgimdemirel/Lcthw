@@ -47,11 +47,6 @@ int is_sorted(List * words)
 }
 */
 
-
-
-
-
-
 char* test_node_cmp()
 {
 	ListNode *node1 = calloc(1, sizeof(ListNode));
@@ -92,13 +87,10 @@ char* test_node_swp()
 char *test_is_sorted()
 {
 	List *words = create_unsorted_words();
-
 	mu_assert( is_sorted(words, (List_compare) strcmp) == 1, 
 				"is_sorted failed for unsorted." );	
-
 	
 	List *sorted_words = create_sorted_words();
-
 	mu_assert( is_sorted(sorted_words, (List_compare) strcmp) == 0, 
 				"is_sorted failed for sorted." );	
 
@@ -135,17 +127,29 @@ char* test_bubble_sort()
 	return NULL;
 }
 
+char* test_merge_2_sorted_lists()
+{
+	List *words1 = create_sorted_words();
+	List *words2 = create_sorted_words();
+	List *words_merged = merge_2_sorted_lists(words1, words2);
+	mu_assert(is_sorted(words_merged, (List_compare) strcmp) == 0,
+			"merge_2_sorted_lists failed.")
+	
+	dump_list(words_merged);
+
+	return NULL;
+}
+
 char* test_merge_sort()
 {
 	List *words = create_unsorted_words();
 
 	// should work on a list that needs sorting
 	List *res1 = List_merge_sort(words, (List_compare) strcmp);
-	mu_assert(is_sorted(res1, (List_compare) strcmp) == 0), "Words are not sorted after merge sort.");
+	mu_assert(is_sorted(res1, (List_compare) strcmp) == 0, "Words are not sorted after merge sort.");
 
-	List *res2 = List_merge_sort (res, (List_compare) strcmp);
-	mu_assert(is_sorted(res2, (List_compare) strcmp) == 0), 
-		"Should still be sorted after merge sort.");
+	List *res2 = List_merge_sort (res1, (List_compare) strcmp);
+	mu_assert(is_sorted(res2, (List_compare) strcmp) == 0, "Should still be sorted after merge sort.");
 
 	List_destroy(res1);
 	List_destroy(res2);
@@ -165,6 +169,7 @@ char* all_tests()
 	mu_run_test(test_is_sorted);
 
 	mu_run_test(test_bubble_sort);
+	mu_run_test(test_merge_2_sorted_lists);
 
 	//mu_run_test(test_merge_sort);
 
