@@ -132,7 +132,7 @@ void *List_remove(List * list, ListNode * node)
 	// Removes first Node in the List
 	} else if (node == list->first) {
 		list->first = node->next;
-		check(list->first != NULL,
+		check(list->first !=NULL,
 				"Invalid list, somehow got a first that is NULL.");
 		list->first->prev = NULL;
 	// Removes last Node in the List
@@ -152,8 +152,6 @@ void *List_remove(List * list, ListNode * node)
 	list->count--;
 	result = node->value;
 	free(node);
-
-	return result;
 
 error:
 	return result;
@@ -235,4 +233,11 @@ List *Join_two_lists(List* list1, List *list2)
 	}
 	
 	return joined_list;
+}
+
+void List_copy(List* list2, List* list1)
+{
+	for (int i = 0; i < list1->count; i++) {
+		List_push(list2, List_get_nth(list1, i));
+	}
 }

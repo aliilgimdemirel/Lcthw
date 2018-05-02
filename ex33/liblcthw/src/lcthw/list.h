@@ -94,3 +94,8 @@ void Split_list_into_2_Lists_At_Position(List* list1, List *list2, List *list3, 
 /*
  * frees all Nodes then, frees the List itself.
  */
+
+/*
+ * A method to copy list1 into list2.
+ */
+void List_copy(List* list2, List* list1);
