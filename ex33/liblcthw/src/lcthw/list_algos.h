@@ -39,6 +39,10 @@ int List_bubble_sort(List* list, List_compare cmp);
  * merges sorted lists 1 and 2 and returns a new list.
  */
 List* merge_2_sorted_lists(List* list1, List* list2);
+
+/*
+ * 
+ */
 List* List_merge_sort(List* list, List_compare cmp);
 	
 /*
