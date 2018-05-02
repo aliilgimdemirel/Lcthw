@@ -37,7 +37,7 @@ build:
 
 # I do not even know how to name this, **the rest** ???
 %: %.c 
-	${CC} ${CFLAGS} -o $@ $< $(TARGET)
+	${CC} ${CFLAGS} -lm -o $@ $< $(TARGET)
 
 # The Unit Tests
 #.PHONY: $(TESTS)
