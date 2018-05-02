@@ -103,31 +103,6 @@ int is_sorted(List* list, List_compare cmp)
 	return 0;
 }
 
-
-
-
-List* List_merge_sort(List* list, List_compare cmp)
-{
-	List* ret_list = List_create();
-	
-	int num_of_elements = list->count;
-	List **all_lists = calloc(num_of_elements, sizeof(List*));
-	ListNode* cur = list->first;
-
-	for (int i = 0; i < num_of_elements; i ++) {
-		all_lists[i] = List_create();
-		List_push(all_lists[i], cur->value);
-
-		cur = cur->next;
-	}
-
-	
-
-
-
-	return ret_list;
-}
-
 List* merge_2_sorted_lists(List* list1, List* list2)
 {
 	ListNode* cur1 = list1->first;
@@ -149,18 +124,94 @@ List* merge_2_sorted_lists(List* list1, List* list2)
 	
 	printf("DEBUG1\n");
 	if (cur1 == NULL) {
-		printf("DEBUG1\n");
 		ret_list = Join_two_lists(mid_list, list2);
-		printf("DEBUG2\n");
 	} else {
-		printf("DEBUG1\n");
 		ret_list = Join_two_lists(mid_list, list1);
-		printf("DEBUG2\n");
 	}
 
-	dump_list(ret_list);
 	return ret_list;
 
+}
+
+
+
+
+List* List_merge_sort(List* list, List_compare cmp)
+{
+	List* ret_list = List_create();
+	
+	int num_of_elements = list->count;
+	List **all_lists = calloc(num_of_elements, sizeof(List*));
+	ListNode* cur = list->first;
+
+	for (int i = 0; i < num_of_elements; i ++) {
+		all_lists[i] = List_create();
+		List_push(all_lists[i], cur->value);
+
+		cur = cur->next;
+	}
+
+	int counterValue = num_of_elements;	
+
+	List **outputLists = calloc (counterValue, sizeof(List*));
+
+// 17e > 9m
+// 9e > 5m
+// 5e > 3m
+// 3e > 2m
+// 2e > 1m LAST ONE
+
+	counterValue = ( (counterValue % 2 == 0) ? counterValue/2: counterValue/2 + 1 ) ;
+
+	printf("---\n At the begining \nnumOfElems is: %d\nCounterValue is:%d\n",
+					 num_of_elements ,counterValue);
+
+	while (1) {
+
+		for (int i = 0; i < counterValue; i++) {
+			if ( num_of_elements == (i * 2) + 1 ) {
+				printf("will merge with empty\n") ;
+				// all_lists[i*2+1] does not exist 
+		//		List * empty_list = List_create(); 
+		//		outputLists[i] = merge_2_sorted_lists(all_lists[i*2], empty_list);
+		//		List_destroy(empty_list);
+			} else {
+				printf("will merge proper\n") ;
+		//		outputLists[i] = merge_2_sorted_lists(all_lists[i*2], all_lists[i*2+1]);
+			}
+		
+		}
+
+		// copy lists then kill old
+		for (int i = 0; i < counterValue; i++) {
+			//List_copy(all_lists[i], outputLists[i]);
+			//List_destroy(outputLists[i]);
+			printf("%d", i);
+		}
+			printf("\n");
+
+		
+		//free(outputLists);
+
+		// update counter Value OR exit while loop
+		if (counterValue != 1) {
+			counterValue = ( (counterValue % 2 == 0) ? \
+							counterValue/2 : counterValue/2 + 1 ) ;
+			num_of_elements = ( (num_of_elements % 2 == 0) ? \
+							num_of_elements/2 : num_of_elements/2 + 1 ) ;
+		} else {
+			printf("Gonna break cuz ctrVal is: %d\n",counterValue);
+			break;
+		}
+
+		//List **outputLists = calloc (counterValue, sizeof(List*));
+
+	}
+
+	// all_lists[0] should have the result.
+
+
+	return ret_list;
 }
 
 
