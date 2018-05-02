@@ -11,3 +11,14 @@
 - [ ] implement bubble sort
 - [ ] implement merge sort
 
+
+
+
+# LEARN !!!
+* how to properly 
+<code>	
+printf("---\n At the begining \nnumOfElems is: %d\n \ 
+									CounterValue is:%d\n", num_of_elements ,counterValue);
+</code>
+* ternary op; [ (cond ) ? TRUE : FALSE ];
+reads as, if cond is true ? > do the first : do the next.
