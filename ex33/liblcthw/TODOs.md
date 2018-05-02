@@ -8,8 +8,13 @@
 - [x] write test for list node swp
 - [x] implement list node cmp
 - [x] implement list node swp
-- [ ] implement bubble sort
-- [ ] implement merge sort
+- [x] implement bubble sort
+- [x] implement merge sort
+- [ ] improve merger sort with swapping list arrays.
+- [ ] do timing analysis 
+- [ ] add List\_insert\_sorted
+- [ ] implement quick sort
+
 
 
 
