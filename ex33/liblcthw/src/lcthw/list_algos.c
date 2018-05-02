@@ -1,17 +1,6 @@
-
-
-
-
-
 #include "lcthw/list_algos.h"
 #include "lcthw/dbg.h"
 #include <string.h>
-
-
-
-
-
-
 
 int List_node_cmp(ListNode* node1, ListNode* node2, List_compare cmp)
 {
@@ -25,8 +14,6 @@ int List_node_cmp(ListNode* node1, ListNode* node2, List_compare cmp)
 		return -1;
 	}
 }
-
-
 
 void List_node_swp(ListNode* node1, ListNode* node2)
 {
@@ -170,12 +157,6 @@ List* List_merge_sort(List* list, List_compare cmp)
 
 	List **outputLists = calloc (counterValue, sizeof(List*));
 
-// 17e > 9m
-// 9e > 5m
-// 5e > 3m
-// 3e > 2m
-// 2e > 1m LAST ONE
-
 	counterValue = ( (counterValue % 2 == 0) ? counterValue/2: counterValue/2 + 1 ) ;
 	
 	for (int i = 0; i < counterValue; i ++) {
@@ -183,25 +164,16 @@ List* List_merge_sort(List* list, List_compare cmp)
 	}
 
 	while (1) {
-		printf("---\n At the begining \nnumOfElems is: %d\ncounterValue is:%d\n",
-					 num_of_elements ,counterValue);
 
 		for (int i = 0; i < counterValue; i++) {
 			// all_lists[i*2+1] does not exist 
 			if ( num_of_elements == (i * 2) + 1 ) {
-				printf("will merge with empty\n") ;
 				List * empty_list = List_create(); 
 				outputLists[i] = merge_2_sorted_lists(all_lists[i*2], empty_list);
-				dump_list(outputLists[i]);
 				List_destroy(empty_list);
 			} else {
-				printf("will merge proper\n") ;
-				dump_list(all_lists[i*2]);
-				dump_list(all_lists[i*2+1]);
 				outputLists[i] = merge_2_sorted_lists(all_lists[i*2], all_lists[i*2+1]);
-				dump_list(outputLists[i]);
 			}
-		
 		}
 
 		// TRICKY!!!!
@@ -218,10 +190,6 @@ List* List_merge_sort(List* list, List_compare cmp)
 		// TRICKY!!!!
 		// TRICKY!!!!
 
-		printf("DEBUG1\n");
-		//free(outputLists);
-		printf("DEBUG1\n");
-
 		// update counter Value OR exit while loop
 		if (counterValue != 1) {
 			counterValue = ( (counterValue % 2 == 0) ? \
@@ -229,31 +197,14 @@ List* List_merge_sort(List* list, List_compare cmp)
 			num_of_elements = ( (num_of_elements % 2 == 0) ? \
 							num_of_elements/2 : num_of_elements/2 + 1 ) ;
 		} else {
-			printf("Gonna break cuz ctrVal is: %d\n",counterValue);
 			break;
 		}
-
-		printf("DEBUG2\n");
-		outputLists = calloc (counterValue, sizeof(List*));
-		printf("DEBUG2\n");
-
 	}
 
-	//all_lists[0] should have the result.
-
 	ret_list = all_lists[0];
-	dump_list(ret_list);
 
 	return ret_list;
 }
-
-
-
-
-
-
-
-
 
 void dump_list(List* list)
 {
