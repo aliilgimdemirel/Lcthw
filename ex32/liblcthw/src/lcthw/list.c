@@ -234,3 +234,10 @@ List *Join_two_lists(List* list1, List *list2)
 	
 	return joined_list;
 }
+
+void List_copy(List* list2, List* list1)
+{
+	for (int i = 0; i < list1->count; i++) {
+		List_push(list2, List_get_nth(list1, i));
+	}
+}

@@ -291,6 +291,37 @@ char *test_shift()
 	return NULL;
 }
 
+
+char *test_copy_list()
+{
+	list1 = List_create();
+	mu_assert(list1 != NULL, "Failed to create list.");
+	list2 = List_create();
+	mu_assert(list2 != NULL, "Failed to create list.");
+	
+	// Populate 1st List
+	List_push(list1, test1);
+	mu_assert(List_last(list1) == test1, "Wrong last value.");
+	List_push(list1, test1);
+	mu_assert(List_last(list1) == test1, "Wrong last value.");
+	List_push(list1, test2);
+	mu_assert(List_last(list1) == test2, "Wrong last value.");
+	List_push(list1, test2);
+	mu_assert(List_last(list1) == test2, "Wrong last value.");
+	List_push(list1, test3);
+	mu_assert(List_last(list1) == test3, "Wrong last value.");
+	List_push(list1, test3);
+	mu_assert(List_last(list1) == test3, "Wrong last value.");
+
+	List_copy(list2, list1);
+	mu_assert(list1->count == list2->count, "Wrong count after Copy" );
+
+	List_destroy(list1);
+	List_destroy(list2);
+
+	return NULL;
+}
+
 char *all_tests()
 {
 	mu_suite_start();
@@ -308,6 +339,8 @@ char *all_tests()
 	mu_run_test(test_join_two_Lists);
 	
 	mu_run_test(test_split_into_two_Lists);
+	
+	mu_run_test(test_copy_list);
 
 	mu_run_test(test_destroy);
 
