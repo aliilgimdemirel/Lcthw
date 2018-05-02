@@ -135,7 +135,22 @@ char* test_merge_2_sorted_lists()
 	mu_assert(is_sorted(words_merged, (List_compare) strcmp) == 0,
 			"merge_2_sorted_lists failed.")
 	
-	dump_list(words_merged);
+	//dump_list(words_merged);
+	//dump_list(words1);
+
+	List* empty = List_create(); // WORKS
+	//List* empty = calloc(1, sizeof(List)); // WORKS on both POSITIONS
+	List *words_merged2 = merge_2_sorted_lists(empty, words1 );
+	mu_assert(is_sorted(words_merged2, (List_compare) strcmp) == 0,
+			"merge_2_sorted_lists failed.")
+	
+	//dump_list(words_merged2);
+
+	List_destroy(empty);
+	List_destroy(words1);
+	List_destroy(words2);
+	List_destroy(words_merged);
+	List_destroy(words_merged2);
 
 	return NULL;
 }

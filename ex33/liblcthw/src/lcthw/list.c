@@ -222,7 +222,7 @@ List *Join_two_lists(List* list1, List *list2)
 	assert(list1 != NULL); 
 	assert(list2 != NULL);
  
-	List *joined_list =  malloc(sizeof(List));
+	List *joined_list =  calloc(1, sizeof(List));
 
 	for (int i = 0; i < list1->count; i++) {
 		List_push ( joined_list, List_get_nth(list1, i) );
