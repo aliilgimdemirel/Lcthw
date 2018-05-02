@@ -1,16 +1,20 @@
 #include "lcthw/dbg.h"
 #include "lcthw/list.h"
 #include <stdio.h>
-#include <assert.h>
 
 List *List_create()
 {
-	return calloc(1, sizeof(List));
+	List* list = calloc(1, sizeof(List));
+	check_mem(list);
+	return list;
+
+error:
+	return NULL;
 }
 
 void List_destroy(List * list)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	LIST_FOREACH(list, first, next, cur) {
 		if (cur->prev) {
@@ -20,20 +24,26 @@ void List_destroy(List * list)
 
 	free(list->last);
 	free(list);
+
+error:
+	return ;
 }
 
 void List_clear(List * list)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	LIST_FOREACH(list, first, next, cur) {
 		cur->value = NULL;
 	}
+
+error:
+	return ;
 }
 
 void List_clear_destroy(List * list)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	List_clear(list);
 //	List_destroy(list);
@@ -52,11 +62,14 @@ void List_clear_destroy(List * list)
 	free(list);
 		printf("DEBUG4\n");
 */
+
+error:
+	return ;
 }
 
 void List_push(List * list, void *value)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	ListNode *node = calloc(1, sizeof(ListNode));
 	check_mem(node);
@@ -80,15 +93,18 @@ error:
 
 void *List_pop(List * list)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	ListNode *node = list->last;
 	return node != NULL ? List_remove(list, node) : NULL;
+
+error:
+	return NULL;
 }
 
 void List_unshift(List * list, void *value)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	ListNode *node = calloc(1, sizeof(ListNode));
 	check_mem(node);
@@ -112,10 +128,13 @@ error:
 
 void *List_shift(List * list)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	ListNode *node = list->first;
 	return node != NULL ? List_remove(list, node) : NULL;
+
+error:
+	return NULL;
 }
 
 void *List_remove(List * list, ListNode * node)
@@ -159,7 +178,7 @@ error:
 
 void List_insert_at_nth(List * list, int n, void *value)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	ListNode *cur = list->first;
 	// Check for empty List.
@@ -186,7 +205,7 @@ error:
 
 void *List_get_nth(List * list, int n)
 {
-	assert(list != NULL); 
+	check(list != NULL, "Non existent list");
 
 	ListNode *node = list->first;
 	check(node != NULL, "List is empty."); 
@@ -203,9 +222,9 @@ error:
 
 void Split_list_into_2_Lists_At_Position(List* list1, List *list2, List *list3, int split_index)
 {
-	assert(list1 != NULL); 
-	assert(list2 != NULL); 
-	assert(list3 != NULL); 
+	check(list1 != NULL, "Non existent list");
+	check(list2 != NULL, "Non existent list");
+	check(list3 != NULL, "Non existent list");
 	
 	for (int i = 0; i < split_index; i++) {
 		List_push ( list2, List_get_nth(list1, i) );
@@ -215,14 +234,17 @@ void Split_list_into_2_Lists_At_Position(List* list1, List *list2, List *list3, 
 		List_push ( list3, List_get_nth(list1, i) );
 	}
 
+error:
+	return;
 }
 
 List *Join_two_lists(List* list1, List *list2)
 { 
-	assert(list1 != NULL); 
-	assert(list2 != NULL);
+	check(list1 != NULL, "Non existent list");
+	check(list2 != NULL, "Non existent list");
  
 	List *joined_list =  calloc(1, sizeof(List));
+	check_mem(joined_list);
 
 	for (int i = 0; i < list1->count; i++) {
 		List_push ( joined_list, List_get_nth(list1, i) );
@@ -233,11 +255,20 @@ List *Join_two_lists(List* list1, List *list2)
 	}
 	
 	return joined_list;
+
+error:
+	return NULL;
 }
 
 void List_copy(List* list2, List* list1)
 {
+	check(list1 != NULL, "Non existent list");
+	check(list2 != NULL, "Non existent list");
+
 	for (int i = 0; i < list1->count; i++) {
 		List_push(list2, List_get_nth(list1, i));
 	}
+
+error:
+	return;
 }

@@ -3,7 +3,7 @@
 
 #include "lcthw/list.h"
 
-typedef int (*List_compare)(char* a, char* b);
+typedef int (*List_compare)(const void* a, const void* b);
 
 /*
  * A method for comparing the node values. 
@@ -21,13 +21,19 @@ void List_node_swp(ListNode* node1, ListNode* node2);
 
 /*
  * Takes in a list, and a comparison function pointer and checks if 
- * the list is sorted or not. Returns 0 if sorted, else it returns 1.
+ * the list is sorted or not. 
+ * Returns 0 if sorted, else it returns 1.
+ * It has early termination for empty and single element lists.
  */
 int is_sorted(List* list, List_compare cmp);
 
-
+/*
+ * Takes in a list, and a comparison function pointer and sorts 
+ * the list via bubble sort. 
+ * Returns 0 when it succeeds, else it returns 1.
+ * It has early termination for empty and single element lists.
+ */
 int List_bubble_sort(List* list, List_compare cmp);
-
 
 /*
  * merges sorted lists 1 and 2 and returns a new list.
@@ -35,6 +41,9 @@ int List_bubble_sort(List* list, List_compare cmp);
 List* merge_2_sorted_lists(List* list1, List* list2);
 List* List_merge_sort(List* list, List_compare cmp);
 	
+/*
+ * A method for debug purposes.
+ */
 void dump_list(List* list);
 static void dump_node(ListNode* node, char* nodeName);
 #endif
