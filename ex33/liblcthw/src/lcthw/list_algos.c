@@ -18,7 +18,7 @@ int List_node_cmp(ListNode* node1, ListNode* node2, List_compare cmp)
 	}
 
 error:
-	return;
+	return -1; // this is a bug
 }
 
 void List_node_swp(ListNode* node1, ListNode* node2)
@@ -83,8 +83,11 @@ int List_bubble_sort(List* list, List_compare cmp)
 
 	int loopCount = list->count;
 	int innerLoopCount = loopCount;
+	int sorted = 0;
 
-	for (int i = 0; i < loopCount; i++) {
+	//for (int i = 0; i < loopCount; i++) 
+	while (sorted == 0) {
+		sorted = 1;
 		ListNode* cur = list->first;
 		ListNode* next = cur->next;
 	
@@ -93,6 +96,7 @@ int List_bubble_sort(List* list, List_compare cmp)
 			int rc = List_node_cmp(cur, next, (List_compare) cmp);
 			if ( rc > 0 ) {
 				List_node_swp(cur, next);
+				sorted = 0;
 			} 
 
 			if (next != list->last) {
@@ -180,11 +184,11 @@ List* List_merge_sort(List* list, List_compare cmp)
 		cur = cur->next;
 	}
 
-	List **outputLists = calloc (counterValue, sizeof(List*));
-	check_mem(outputLists);
-
 	int counterValue = num_of_elements;	
 	counterValue = ( (counterValue % 2 == 0) ? counterValue/2: counterValue/2 + 1 ) ;
+
+	List **outputLists = calloc (counterValue, sizeof(List*));
+	check_mem(outputLists);
 	
 	for (int i = 0; i < counterValue; i ++) {
 		outputLists[i] = List_create();
