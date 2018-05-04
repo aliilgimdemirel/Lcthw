@@ -5,11 +5,14 @@
 #include <math.h>
 #include <time.h>
 
+
 char *unsorted_values[] = { "XXXX", "1234", "abcd", "xjvef", "NDSS" };
 char *sorted_values[] = { "1234", "NDSS",  "XXXX", "abcd", "xjvef" };
 
 #define NUM_VALUES 5
-#define REPEAT_SORT 5
+#define REPEAT_SORT 1
+#define LIST_SIZE 1
+#define ORDEROFMAG 4
 
 List *create_unsorted_words()
 {
@@ -48,42 +51,77 @@ List *create_big_unsorted_List(List* list1, int how_big)
 
 char* test_bubble_sort_time()
 {
-	clock_t start_t, end_t, total_t;
+	clock_t start_t, end_t;
+	int order_of_mag_list_size = ORDEROFMAG; // BAD NAMING
+	double total_time[order_of_mag_list_size-1];
 
-	List *words = create_unsorted_words();
-	List *big_unsorted = create_big_unsorted_List(words, 50);
+	int list_size = LIST_SIZE * 1;
+
 	List *fill_list;
+	List *words = create_unsorted_words();
+	printf("\nBubble Sort --- \n");
+	for (int i = 0; i < order_of_mag_list_size; i++) {
 
-	int rc = 0;
-	
-	start_t = clock();
-	for (int i = 0; i < REPEAT_SORT; i++) {
-		fill_list = List_bubble_sort(big_unsorted, (List_compare) strcmp);
+		List *big_unsorted = create_big_unsorted_List(words, list_size);
+
+		total_time[i] = 0.0;
+		start_t = clock();
+		 
+		// BENCHMARK
+		for (int j = 0; j < REPEAT_SORT; j++) {
+			fill_list = List_bubble_sort(big_unsorted, (List_compare) strcmp);
+		}
+
+		end_t = clock();
+		total_time[i] = ( (double)end_t - start_t ) / ( CLOCKS_PER_SEC/1000 );
+
+		printf("Loop Count: %d, List Size: %d\n", REPEAT_SORT, list_size);
+		printf("Total time taken by CPU in mSeconds: %.8f\n", total_time[i]);
+
+		List_destroy(big_unsorted);
+		list_size = list_size * 10;
+				
 	}
 
-	end_t = clock();
-
-	total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-
 	List_destroy(words);
-	List_destroy(big_unsorted);
 
 	return NULL;
 }
 
 char* test_merge_sort_time()
 {
+	clock_t start_t, end_t;
+	int order_of_mag_list_size = ORDEROFMAG; // BAD NAMING
+	double total_time[order_of_mag_list_size-1];
+
+	int list_size = LIST_SIZE * 1;
+
 	List *words = create_unsorted_words();
+	printf("\nMerge Sort --- \n");
+	for (int i = 0; i < order_of_mag_list_size; i++) {
 
-	// should work on a list that needs sorting
-	List *res1 = List_merge_sort(words, (List_compare) strcmp);
-//	mu_assert(is_sorted(res1, (List_compare) strcmp) == 0, "Words are not sorted after merge sort.");
+		List *fill_list;
+		List *big_unsorted = create_big_unsorted_List(words, list_size);
 
-//	List *res2 = List_merge_sort (res1, (List_compare) strcmp);
-//	mu_assert(is_sorted(res2, (List_compare) strcmp) == 0, "Should still be sorted after merge sort.");
+		total_time[i] = 0.0;
+		start_t = clock();
+		 
+		// BENCHMARK
+		for (int j = 0; j < REPEAT_SORT; j++) {
+			fill_list = List_merge_sort(big_unsorted, (List_compare) strcmp);
+		}
 
-	List_destroy(res1);
-//	List_destroy(res2);
+		end_t = clock();
+		total_time[i] = ( (double)end_t - start_t ) / ( CLOCKS_PER_SEC/1000 );
+
+		printf("Loop Count: %d, List Size: %d\n", REPEAT_SORT, list_size);
+		printf("Total time taken by CPU in mSeconds: %.8f\n", total_time[i]);
+
+		List_destroy(fill_list);
+		List_destroy(big_unsorted);
+		list_size = list_size * 10;
+				
+	}
 
 	List_destroy(words);
 
@@ -96,7 +134,7 @@ char* all_tests()
 
 	mu_run_test(test_bubble_sort_time);
 
-	//mu_run_test(test_merge_sort_time);
+	mu_run_test(test_merge_sort_time);
 
 	return NULL;
 }
