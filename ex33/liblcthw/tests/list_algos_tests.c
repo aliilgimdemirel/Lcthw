@@ -100,26 +100,27 @@ char *test_is_sorted()
 char* test_bubble_sort()
 {
 	List *words = create_unsorted_words();
+	List *sorted_list;
 
 	//should work on a list that needs sorting
-	int rc = List_bubble_sort(words, (List_compare) strcmp);
-	mu_assert(rc == 0, "Bubble sort failed.");
-	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+	sorted_list = List_bubble_sort(words, (List_compare) strcmp);
+	mu_assert(sorted_list != NULL, "Bubble sort failed.");
+	mu_assert(is_sorted(sorted_list, (List_compare) strcmp) == 0, 
 		"Words are not sorted after bubble sort.");
 
 	//should work on an already sorted list
-	rc = List_bubble_sort(words, (List_compare) strcmp);
-	mu_assert(rc == 0, "Bubble sort of alreader sorted failed.");
-	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+	sorted_list = List_bubble_sort(sorted_list, (List_compare) strcmp);
+	mu_assert(sorted_list != NULL, "Bubble sort of alreader sorted failed.");
+	mu_assert(is_sorted(sorted_list, (List_compare) strcmp) == 0, 
 		"Words should be sorted if already bubble sorted.");
 
 	List_destroy(words);
 	
 	//should work on an empty list
 	words = List_create(words);
-	rc = List_bubble_sort(words, (List_compare) strcmp);
-	mu_assert(rc == 0, "Bubble sort failed on empty list.");
-	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+	sorted_list = List_bubble_sort(words, (List_compare) strcmp);
+	mu_assert(sorted_list != NULL, "Bubble sort failed on empty list.");
+	mu_assert(is_sorted(sorted_list, (List_compare) strcmp) == 0, 
 		"Words should be sorted if empty.");
 
 	List_destroy(words);

@@ -30,10 +30,10 @@ int is_sorted(List* list, List_compare cmp);
 /*
  * Takes in a list, and a comparison function pointer and sorts 
  * the list via bubble sort. 
- * Returns 0 when it succeeds, else it returns 1.
+ * Returns a sorted list when it succeeds, else it returns NULL.
  * It has early termination for empty and single element lists.
  */
-int List_bubble_sort(List* list, List_compare cmp);
+List* List_bubble_sort(List* list, List_compare cmp);
 
 /*
  * merges sorted lists 1 and 2 and returns a new list.

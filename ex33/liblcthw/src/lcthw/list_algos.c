@@ -69,26 +69,29 @@ error:
 	return 1;
 }
 
-int List_bubble_sort(List* list, List_compare cmp)
+List* List_bubble_sort(List* list, List_compare cmp)
 {
 	check(list != NULL, "Non existent list");
 	
+	List* ret_list = List_create();
+	List_copy(ret_list, list);
+	
 	// empty lists are sorted.
-	if (list->first == NULL) { return 0; }
+	if (list->first == NULL) { return ret_list; }
 	// single element list is sorted.
-	if (list->first->next == NULL) { return 0; }
+	if (list->first->next == NULL) { return ret_list; }
 
-	// early abort for already sorted lists.
-	if (!is_sorted(list, (List_compare) cmp)) { return 0;}
+	// early abort for already sorted ret_lists.
+	if (!is_sorted(ret_list, (List_compare) cmp)) { return ret_list;}
 
-	int loopCount = list->count;
+	int loopCount = ret_list->count;
 	int innerLoopCount = loopCount;
 	int sorted = 0;
 
 	//for (int i = 0; i < loopCount; i++) 
 	while (sorted == 0) {
 		sorted = 1;
-		ListNode* cur = list->first;
+		ListNode* cur = ret_list->first;
 		ListNode* next = cur->next;
 	
 		innerLoopCount = innerLoopCount-1;		
@@ -99,17 +102,17 @@ int List_bubble_sort(List* list, List_compare cmp)
 				sorted = 0;
 			} 
 
-			if (next != list->last) {
+			if (next != ret_list->last) {
 				next = next->next;
 				cur = cur->next;
 			}
 		}
 	}
 
-	return 0;
+	return ret_list;
 
 error:
-	return 1;
+	return NULL;
 }
 
 List* merge_2_sorted_lists(List* list1, List* list2)
