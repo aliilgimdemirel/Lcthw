@@ -244,9 +244,3 @@ void dump_list(List* list)
 	}
 	printf("\n");
 }
-
-static void dump_node(ListNode* node, char* nodeName)
-{
-	printf("%s's\n val is : %s\n next is:%p\n prev is:%p\n", nodeName,
-			node->value, node->next, node->prev);
-}

@@ -49,5 +49,4 @@ List* List_merge_sort(List* list, List_compare cmp);
  * A method for debug purposes.
  */
 void dump_list(List* list);
-static void dump_node(ListNode* node, char* nodeName);
 #endif
