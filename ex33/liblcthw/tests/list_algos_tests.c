@@ -205,6 +205,53 @@ char* test_merge_sort_with_swap()
 	return NULL;
 }
 
+char* test_insert_sorted()
+{
+	List *words = create_sorted_words();
+
+	int rc;
+	rc = List_bubble_sort(words, (List_compare) strcmp);
+	mu_assert(rc == 0, "Bubble sort failed.");
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words are not sorted after bubble sort.");
+
+	// insert the last value
+	rc = List_insert_sorted(words, List_get_nth(words, 4), (List_compare) strcmp );
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if already bubble sorted.");
+	mu_assert(words->count == 6, "List count is incorrect after insert sort.");
+
+	// insert the initial value
+	rc = List_insert_sorted(words, List_get_nth(words, 0), (List_compare) strcmp );
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if already bubble sorted.");
+	mu_assert(words->count == 7, "List count is incorrect after insert sort.");
+
+	// insert an existing value with sorted insert
+	rc = List_insert_sorted(words, List_get_nth(words, 3), (List_compare) strcmp );
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if already bubble sorted.");
+	mu_assert(words->count == 8, "List count is incorrect after insert sort.");
+
+	char *val = "1111";
+	// insert a value that is smaller than any value in the list
+	rc = List_insert_sorted(words, val, (List_compare) strcmp );
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if already bubble sorted.");
+	mu_assert(words->count == 9, "List count is incorrect after insert sort.");
+
+	val = "zzzz";
+	// insert a value that is bigger than any value in the list
+	rc = List_insert_sorted(words, val, (List_compare) strcmp );
+	mu_assert(is_sorted(words, (List_compare) strcmp) == 0, 
+		"Words should be sorted if already bubble sorted.");
+	mu_assert(words->count == 10, "List count is incorrect after insert sort.");
+
+	List_destroy(words);
+
+	return NULL;
+}
+
 char* all_tests()
 {
 	mu_suite_start();
@@ -220,6 +267,8 @@ char* all_tests()
 	mu_run_test(test_merge_sort);
 
 	mu_run_test(test_merge_sort_with_swap);
+
+	mu_run_test(test_insert_sorted);
 
 	return NULL;
 }
