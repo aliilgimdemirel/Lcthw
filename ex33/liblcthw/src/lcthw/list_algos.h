@@ -44,7 +44,6 @@ List* merge_2_sorted_lists(List* list1, List* list2, List_compare cmp);
  * 
  */
 List* List_merge_sort(List* list, List_compare cmp);
-
 List* List_merge_sort_with_swap(List* list, List_compare cmp);
 	
 /*
@@ -54,4 +53,5 @@ void dump_list(List* list);
 
 int List_bubble_sort_book(List* list, List_compare cmp);
 List* List_merge_sort_book(List* list, List_compare cmp);
+int List_insert_sorted(List* list, void* value, List_compare cmp);
 #endif

@@ -184,21 +184,27 @@ void List_insert_at_nth(List * list, int n, void *value)
 	ListNode *cur = list->first;
 	// Check for empty List.
 	check(cur != NULL, "List is empty."); 
-	ListNode *node = calloc( 1, sizeof(ListNode) );
-	check_mem(node);
+	ListNode *node;
 
-	for (int i = 0; i < n; i++) {
-		cur = cur->next;	
+	if (n == 0) {
+		List_unshift(list, value);
+	} else if ( n == list->count ) {
+		List_push(list, value);
+	} else {
+		node = calloc( 1, sizeof(ListNode) );
+
+		for (int i = 0; i < n; i++) {
+			cur = cur->next;	
+		}
+
+		node->value = value;
+		node->prev = cur->prev;
+		node->next = cur;
+		cur->prev->next = node;
+		cur->prev = node;
+
+		list->count++;
 	}
-
-	node->value = value;
-	node->prev = cur->prev;
-	node->next = cur;
-	cur->prev->next = node;
-	cur->prev = node;
-
-	list->count++;
-
 
 error:
 	return ;

@@ -430,6 +430,36 @@ error:
 	return 1;
 }
 
+int List_insert_sorted(List* list, void* value, List_compare cmp)
+{
+	check(list != NULL, "Non existent list");
+
+	// check for value in the list, ? cmp(cur->value, value)
+	// when the comparison returns equal or bigger
+
+	ListNode *cur;
+	if ( list->first ) {
+		cur = list->first;
+		//printf("DEBUGinside\n");
+		int i;
+		for ( i = 0; i < list->count; i++) {
+			if ( cmp(value, cur->value) > 0  ) {
+				cur = cur->next;
+			} else {
+				break;
+			}
+		}
+		List_insert_at_nth(list, i, value);
+	} else { // case for empty list
+		List_push(list, value);
+	}
+
+	return 0;
+
+error:
+	return 1;
+}
+
 void dump_list(List* list)
 {
 	LIST_FOREACH(list, first, next, cur) {
