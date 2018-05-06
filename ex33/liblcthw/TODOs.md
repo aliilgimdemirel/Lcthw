@@ -12,11 +12,13 @@
 - [x] implement merge sort
 - [x] improve merger sort with swapping list arrays.
 - [x] do timing analysis 
-- [ ] add List\_insert\_sorted
+- [x] add Test for List\_insert\_sorted
+- [x] add List\_insert\_sorted
 - [ ] implement quick sort
 - [ ] Split\_list\_into\_2\_Lists\_At\_Position is extremely bad, improve!
 
-
+- [ ] CLEAN code, and documentation ! 
+- [ ] Especially insert\_at & insert\_sorted
 
 
 # LEARN !!!
