@@ -10,11 +10,11 @@
 - [x] implement list node swp
 - [x] implement bubble sort
 - [x] implement merge sort
-- [ ] improve merger sort with swapping list arrays.
-- [ ] do timing analysis 
+- [x] improve merger sort with swapping list arrays.
+- [x] do timing analysis 
 - [ ] add List\_insert\_sorted
 - [ ] implement quick sort
-
+- [ ] Split\_list\_into\_2\_Lists\_At\_Position is extremely bad, improve!
 
 
 

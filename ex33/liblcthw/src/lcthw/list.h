@@ -7,9 +7,9 @@
 #define List_first(A) ((A)->first != NULL ? (A)->first->value : NULL)
 #define List_last(A) ((A)->last != NULL ? (A)->last->value : NULL)
 
-#define LIST_FOREACH(L, S, M, V) ListNode *_node = NULL;\
+#define LIST_FOREACH(L, S, M, V) ListNode *node = NULL;\
 													ListNode *V = NULL;\
-for(V = _node = L->S; _node != NULL; V = _node = _node->M)
+for(V = node = L->S; node != NULL; V = node = node->M)
 
 #endif
 
@@ -31,6 +31,7 @@ typedef struct List {
 List *List_create();
 
 void List_destroy(List * list);
+void List_clean(List * list);
 
 /*
  * It assumes that the list has ptr's in data. If its just an int for example,
@@ -92,10 +93,15 @@ List *Join_two_lists(List* list1, List *list2);
 void Split_list_into_2_Lists_At_Position(List* list1, List *list2, List *list3, int split_index);
 
 /*
+ * Concatanates list2 to list1.
+ */
+void List_concat(List* list1, List *list2);
+
+/*
  * frees all Nodes then, frees the List itself.
  */
 
 /*
- * A method to copy list1 into list2.
+ * A method to copy list2 into list1 via pushing.
  */
-void List_copy(List* list2, List* list1);
+List *List_copy(List* list1);

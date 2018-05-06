@@ -121,8 +121,6 @@ char *test_join_two_Lists()
 	mu_assert(list1 != NULL, "Failed to create list.");
 	list2 = List_create();
 	mu_assert(list2 != NULL, "Failed to create list.");
-	list3 = List_create();
-	mu_assert(list3 != NULL, "Failed to create list.");
 	
 	// Populate 1st List
 	List_push(list1, test1);

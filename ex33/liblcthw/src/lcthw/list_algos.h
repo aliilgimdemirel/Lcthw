@@ -33,20 +33,25 @@ int is_sorted(List* list, List_compare cmp);
  * Returns a sorted list when it succeeds, else it returns NULL.
  * It has early termination for empty and single element lists.
  */
-List* List_bubble_sort(List* list, List_compare cmp);
+int List_bubble_sort(List* list, List_compare cmp);
 
 /*
  * merges sorted lists 1 and 2 and returns a new list.
  */
-List* merge_2_sorted_lists(List* list1, List* list2);
+List* merge_2_sorted_lists(List* list1, List* list2, List_compare cmp);
 
 /*
  * 
  */
 List* List_merge_sort(List* list, List_compare cmp);
+
+List* List_merge_sort_with_swap(List* list, List_compare cmp);
 	
 /*
  * A method for debug purposes.
  */
 void dump_list(List* list);
+
+int List_bubble_sort_book(List* list, List_compare cmp);
+List* List_merge_sort_book(List* list, List_compare cmp);
 #endif

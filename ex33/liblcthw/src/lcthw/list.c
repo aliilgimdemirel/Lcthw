@@ -29,6 +29,22 @@ error:
 	return ;
 }
 
+void List_clean(List * list)
+{
+	check(list != NULL, "Non existent list");
+
+	LIST_FOREACH(list, first, next, cur) {
+		if (cur->prev) {
+			List_pop(list);
+		}
+	}
+
+	List_pop(list);
+
+error:
+	return ;
+}
+
 void List_clear(List * list)
 {
 	check(list != NULL, "Non existent list");
@@ -46,22 +62,7 @@ void List_clear_destroy(List * list)
 	check(list != NULL, "Non existent list");
 
 	List_clear(list);
-//	List_destroy(list);
-/*
-	LIST_FOREACH(list, first, next, cur) {
-		printf("DEBUG1\n");
-		free(cur->value);
-		printf("DEBUG2\n");
-		if (cur->prev) {
-			free(cur->prev);
-		}
-	}
-
-	free(list->last);
-		printf("DEBUG3\n");
-	free(list);
-		printf("DEBUG4\n");
-*/
+	List_destroy(list);
 
 error:
 	return ;
@@ -183,7 +184,7 @@ void List_insert_at_nth(List * list, int n, void *value)
 	ListNode *cur = list->first;
 	// Check for empty List.
 	check(cur != NULL, "List is empty."); 
-	ListNode *node = calloc(1,sizeof(ListNode));
+	ListNode *node = calloc( 1, sizeof(ListNode) );
 	check_mem(node);
 
 	for (int i = 0; i < n; i++) {
@@ -225,7 +226,8 @@ void Split_list_into_2_Lists_At_Position(List* list1, List *list2, List *list3, 
 	check(list1 != NULL, "Non existent list");
 	check(list2 != NULL, "Non existent list");
 	check(list3 != NULL, "Non existent list");
-	
+
+	// TODO	
 	for (int i = 0; i < split_index; i++) {
 		List_push ( list2, List_get_nth(list1, i) );
 	}
@@ -238,20 +240,47 @@ error:
 	return;
 }
 
+void List_concat(List* list1, List *list2)
+{ 
+	check(list1 != NULL, "Non existent list");
+	check(list2 != NULL, "Non existent list");
+ 
+	ListNode *cur;
+	if ( list2->first ) {
+		cur = list2->first;
+		while ( cur != NULL) {
+			List_push(list1, cur->value);
+			cur = cur->next;
+		}
+	}
+	
+error:
+	return ;
+}
+
 List *Join_two_lists(List* list1, List *list2)
 { 
 	check(list1 != NULL, "Non existent list");
 	check(list2 != NULL, "Non existent list");
  
-	List *joined_list =  calloc(1, sizeof(List));
+	List *joined_list =  List_create();
 	check_mem(joined_list);
 
-	for (int i = 0; i < list1->count; i++) {
-		List_push ( joined_list, List_get_nth(list1, i) );
+	ListNode *cur;
+	if ( list1->first ) {
+		cur = list1->first;
+		while ( cur != NULL) {
+			List_push(joined_list, cur->value);
+			cur = cur->next;
+		}
 	}
 
-	for (int i = 0; i < list2->count; i++) {
-		List_push ( joined_list, List_get_nth(list2, i) );
+	if ( list2->first ) {
+		cur = list2->first;
+		while ( cur != NULL) {
+			List_push(joined_list, cur->value);
+			cur = cur->next;
+		}
 	}
 	
 	return joined_list;
@@ -260,15 +289,24 @@ error:
 	return NULL;
 }
 
-void List_copy(List* list2, List* list1)
+List *List_copy(List* list1)
 {
 	check(list1 != NULL, "Non existent list");
-	check(list2 != NULL, "Non existent list");
 
-	for (int i = 0; i < list1->count; i++) {
-		List_push(list2, List_get_nth(list1, i));
+	List *ret_list = List_create();
+	check_mem(ret_list);
+
+	ListNode *cur;
+	if ( list1->first ) {
+		cur = list1->first;
+		while ( cur != NULL) {
+			List_push(ret_list, cur->value);
+			cur = cur->next;
+		}	
 	}
 
+	return ret_list;
+
 error:
-	return;
+	return NULL;
 }
